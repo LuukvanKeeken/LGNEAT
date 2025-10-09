@@ -17,4 +17,4 @@ pip install git+https://github.com/EMI-Group/tensorneat.git
 
 
 #for 1 run:
-python3 "jaxtest.py" 
+python3 "xor.py" 

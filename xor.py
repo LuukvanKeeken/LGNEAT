@@ -32,6 +32,7 @@ pipeline = Pipeline(
 )
 state = pipeline.setup()
 # run until terminate
+print("Starting pipeline ...")
 state, best = pipeline.auto_run(state)
 # show result
 pipeline.show(state, best)
