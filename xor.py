@@ -2,11 +2,14 @@ from tensorneat.pipeline import Pipeline
 from tensorneat import algorithm, genome, problem
 from tensorneat.genome import OriginNode, OriginConn
 from tensorneat.common import ACT
+import time
 
 """
 Solving XOR-3d problem with OriginGene
 See https://github.com/EMI-Group/tensorneat/issues/11
 """
+
+start_time = time.time()
 
 algorithm = algorithm.NEAT(
     pop_size=10000,
@@ -26,7 +29,7 @@ problem = problem.XOR3d()
 pipeline = Pipeline(
     algorithm,
     problem,
-    generation_limit=20,
+    generation_limit=200,
     fitness_target=-1e-6,
     seed=42,
 )
@@ -40,7 +43,7 @@ pipeline.show(state, best)
 # visualize the best individual
 network = algorithm.genome.network_dict(state, *best)
 print(algorithm.genome.repr(state, *best))
-# algorithm.genome.visualize(network, save_path="./imgs/xor_network.svg")
+algorithm.genome.visualize(network, save_path="./imgs/xor_network.svg")
 
 # transform the best individual to latex formula
 from tensorneat.common.sympy_tools import to_latex_code, to_python_code
@@ -54,3 +57,5 @@ print(latex_code)
 # transform the best individual to python code
 python_code = to_python_code(*sympy_res)
 print(python_code)
+
+print(f"Total time: {time.time() - start_time:.2f} seconds")
