@@ -30,7 +30,6 @@ pipeline = Pipeline(
     algorithm,
     problem,
     generation_limit=200,
-    fitness_target=-1e-8,
     seed=42,
 )
 state = pipeline.setup()
