@@ -9,7 +9,7 @@ See https://github.com/EMI-Group/tensorneat/issues/11
 """
 
 algorithm = algorithm.NEAT(
-    pop_size=1000,
+    pop_size=10000,
     species_size=20,
     survival_threshold=0.01,
     genome=genome.DefaultGenome(
@@ -26,7 +26,7 @@ problem = problem.XOR3d()
 pipeline = Pipeline(
     algorithm,
     problem,
-    generation_limit=10,
+    generation_limit=20,
     fitness_target=-1e-6,
     seed=42,
 )
