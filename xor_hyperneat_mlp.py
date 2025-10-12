@@ -32,7 +32,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=200
+        generation_limit=20000
     )
 
     # initialize state

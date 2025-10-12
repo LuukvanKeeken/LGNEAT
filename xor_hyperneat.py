@@ -4,6 +4,7 @@ from tensorneat.algorithm.hyperneat import HyperNEAT, FullSubstrate
 from tensorneat.genome import DefaultGenome
 from tensorneat.common import ACT
 import jax.numpy as jnp
+import numpy as np
 
 from tensorneat.problem.func_fit import XOR3d
 
@@ -27,14 +28,14 @@ if __name__ == "__main__":
                 ),
             ),
             activation=ACT.tanh,
-            activate_time=3,
+            activate_time=1,
             output_transform=ACT.sigmoid,
         )
     
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=200
+        generation_limit=20000
     )
 
     # initialize state
@@ -49,6 +50,16 @@ if __name__ == "__main__":
     network = algorithm.neat.genome.network_dict(state, *best)
     print(algorithm.neat.genome.repr(state, *best))
     algorithm.neat.genome.visualize(network, save_path="./imgs/xor_CPPN_network.svg")
+
+    # input_data = np.array([0, 0, 1])
+    # transformed = algorithm.transform(state, best)
+    # output = algorithm.forward(state, transformed, input_data)
+    # input_data = np.array([0, 1, 0])
+    # output = algorithm.forward(state, transformed, input_data)
+    # input_data = np.array([1, 0, 0])
+    # output = algorithm.forward(state, transformed, input_data)
+    # input_data = np.array([1, 1, 1])
+    # output = algorithm.forward(state, transformed, input_data)
 
     h_nodes, h_conns, _ = algorithm.transform(state, best)
 
