@@ -1,6 +1,7 @@
 from tensorneat.pipeline import Pipeline
 from tensorneat.algorithm.neat import NEAT
-from tensorneat.algorithm.hyperneat import HyperNEAT, FullSubstrate
+from tensorneat.algorithm.hyperneat import HyperNEATFeedForward, MLPSubstrate
+from hyperneat_feedforward_cust import HyperNEATFeedForwardCust
 from tensorneat.genome import DefaultGenome
 from tensorneat.common import ACT
 import jax.numpy as jnp
@@ -9,11 +10,9 @@ from tensorneat.problem.func_fit import XOR3d
 
 if __name__ == "__main__":
 
-    algorithm=HyperNEAT(
-            substrate=FullSubstrate(
-                input_coors=((-1, -1), (-0.33, -1), (0.33, -1), (1, -1)),
-                hidden_coors=((-1, 0), (0, 0), (1, 0)),
-                output_coors=((0, 1),),
+    algorithm=HyperNEATFeedForwardCust(
+            substrate=MLPSubstrate(
+                layers=[4, 3, 1],
             ),
             neat=NEAT(
                 pop_size=10000,
@@ -27,7 +26,6 @@ if __name__ == "__main__":
                 ),
             ),
             activation=ACT.tanh,
-            activate_time=10,
             output_transform=ACT.sigmoid,
         )
     
@@ -50,9 +48,9 @@ if __name__ == "__main__":
     print(algorithm.neat.genome.repr(state, *best))
     algorithm.neat.genome.visualize(network, save_path="./imgs/xor_CPPN_network.svg")
 
-    h_nodes, h_conns, _ = algorithm.transform(state, best)
-
+    transformed = algorithm.transform(state, best)
+    seqs, h_nodes, h_conns, u_conns = transformed
     hyper_network = algorithm.hyper_genome.network_dict(state, h_nodes, h_conns)
     print(algorithm.hyper_genome.repr(state, h_nodes, h_conns))
-    algorithm.hyper_genome.visualize(hyper_network, save_path="./imgs/xor_hyperneat_network.svg")
+    algorithm.hyper_genome.visualize(hyper_network, save_path="./imgs/hyperneat_network.svg")
     test = 1
