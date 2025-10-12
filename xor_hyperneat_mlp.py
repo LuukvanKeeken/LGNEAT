@@ -46,11 +46,11 @@ if __name__ == "__main__":
     # visualize the best individual
     network = algorithm.neat.genome.network_dict(state, *best)
     print(algorithm.neat.genome.repr(state, *best))
-    algorithm.neat.genome.visualize(network, save_path="./imgs/xor_CPPN_network.svg")
+    algorithm.neat.genome.visualize(network, save_path="./imgs/xor_CPPN_network_mlp.svg")
 
     transformed = algorithm.transform(state, best)
     seqs, h_nodes, h_conns, u_conns = transformed
     hyper_network = algorithm.hyper_genome.network_dict(state, h_nodes, h_conns)
     print(algorithm.hyper_genome.repr(state, h_nodes, h_conns))
-    algorithm.hyper_genome.visualize(hyper_network, save_path="./imgs/hyperneat_network.svg")
+    algorithm.hyper_genome.visualize(hyper_network, save_path="./imgs/xor_hyperneat_network_mlp.svg")
     test = 1
