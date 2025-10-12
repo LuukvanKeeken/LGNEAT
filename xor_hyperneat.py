@@ -27,7 +27,7 @@ if __name__ == "__main__":
                 ),
             ),
             activation=ACT.tanh,
-            activate_time=10,
+            activate_time=1,
             output_transform=ACT.sigmoid,
         )
     
