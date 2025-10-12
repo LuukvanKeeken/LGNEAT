@@ -53,4 +53,3 @@ if __name__ == "__main__":
     hyper_network = algorithm.hyper_genome.network_dict(state, h_nodes, h_conns)
     print(algorithm.hyper_genome.repr(state, h_nodes, h_conns))
     algorithm.hyper_genome.visualize(hyper_network, save_path="./imgs/xor_hyperneat_network_mlp.svg")
-    test = 1
