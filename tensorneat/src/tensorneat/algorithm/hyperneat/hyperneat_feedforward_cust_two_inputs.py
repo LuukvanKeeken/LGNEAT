@@ -4,8 +4,8 @@ import jax
 from jax import vmap, numpy as jnp
 
 from tensorneat.src.tensorneat.algorithm.hyperneat.substrate import *
-from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat import HyperNEAT, HyperNEATNode, HyperNEATConn
-from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_conn_improved import HyperNEATConnImproved
+from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat import HyperNEAT, HyperNEATNode
+from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_conn_improved_leo import HyperNEATConnImprovedLEO
 from tensorneat.src.tensorneat.common import ACT, AGG
 from tensorneat.src.tensorneat.algorithm import NEAT
 from tensorneat.src.tensorneat.genome.default_two_inputs import DefaultGenomeTwoInputs
@@ -38,7 +38,7 @@ class HyperNEATFeedForwardCustTwoInputs(HyperNEAT):
             max_nodes=substrate.nodes_cnt,
             max_conns=substrate.conns_cnt,
             node_gene=HyperNEATNode(aggregation, activation),
-            conn_gene=HyperNEATConnImproved(),
+            conn_gene=HyperNEATConnImprovedLEO(),
             output_transform=output_transform,
         )
         self.pop_size = neat.pop_size
@@ -50,14 +50,19 @@ class HyperNEATFeedForwardCustTwoInputs(HyperNEAT):
             state, transformed, self.substrate.query_coors
         )
         
+        weights = query_res[:, 0]
+
+
         # make query res in range [-max_weight, max_weight]
-        query_res = jnp.where(
-            query_res > 0, query_res - self.weight_threshold, query_res
+        weights = jnp.where(
+            weights > 0, weights - self.weight_threshold, weights
         )
-        query_res = jnp.where(
-            query_res < 0, query_res + self.weight_threshold, query_res
+        weights = jnp.where(
+            weights < 0, weights + self.weight_threshold, weights
         )
-        query_res = query_res / (1 - self.weight_threshold) * self.max_weight
+        weights = weights / (1 - self.weight_threshold) * self.max_weight
+
+        query_res = jnp.stack([weights, query_res[:, 1]], axis=1)
 
         h_nodes, h_conns = self.substrate.make_nodes(
             query_res
@@ -73,14 +78,16 @@ class HyperNEATFeedForwardCustTwoInputs(HyperNEAT):
     
     def keep_top2_per_postsynaptic(self, h_conns, h_nodes):
         post_ids = h_conns[:, 1]
-        weights = h_conns[:, 2]
+        LEO_values = h_conns[:, 3]
         # Use h_nodes as the list of post-synaptic neuron indices
         def mask_for_post(post):
             mask = (post_ids == post)
-            post_weights = jnp.where(mask, weights, -jnp.inf)
-            top2 = jnp.argsort(post_weights)[-2:]
-            top2_mask = jnp.zeros_like(weights, dtype=bool).at[top2].set(True)
+            post_leos = jnp.where(mask, LEO_values, -jnp.inf)
+            top2 = jnp.argsort(post_leos)[-2:]
+            top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
             return top2_mask & mask
+
+        
 
         all_masks = jax.vmap(mask_for_post)(h_nodes)
         final_mask = jnp.any(all_masks, axis=0)

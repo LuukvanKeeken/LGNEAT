@@ -1,6 +1,6 @@
 from tensorneat.src.tensorneat.pipeline import Pipeline
 from tensorneat.src.tensorneat.algorithm.neat import NEAT
-from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForward, MLPSubstrate
+from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForward, MLPSubstrateLEO
 from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_feedforward_cust_two_inputs import HyperNEATFeedForwardCustTwoInputs
 from tensorneat.src.tensorneat.genome import DefaultGenome
 from tensorneat.src.tensorneat.common import ACT
@@ -15,16 +15,16 @@ start_time = time.time()
 if __name__ == "__main__":
 
     algorithm=HyperNEATFeedForwardCustTwoInputs(
-            substrate=MLPSubstrate(
-                layers=[4, 50, 50, 1],
+            substrate=MLPSubstrateLEO(
+                layers=[4, 3, 3, 1],
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
                     num_inputs=4,  # size of query coors
-                    num_outputs=1,
+                    num_outputs=2,
                     init_hidden_layers=(),
                     output_transform=ACT.tanh,
                 ),
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=50
+        generation_limit=20
     )
 
     # initialize state
