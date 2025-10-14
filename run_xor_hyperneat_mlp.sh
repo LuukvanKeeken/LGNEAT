@@ -9,10 +9,6 @@ cd /project_antwerp/code/LGNEAT
 python -m pip install -U pip
 
 pip install -U "jax[cuda12]"
-pip install git+https://github.com/EMI-Group/tensorneat.git
-
-
-
 
 
 
