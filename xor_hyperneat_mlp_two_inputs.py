@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     algorithm=HyperNEATFeedForwardCustTwoInputs(
             substrate=MLPSubstrate(
-                layers=[4, 3, 1],
+                layers=[4, 50, 50, 1],
             ),
             neat=NEAT(
                 pop_size=10000,
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=1000
+        generation_limit=50
     )
 
     # initialize state
