@@ -1,4 +1,4 @@
-from tensorneat.algorithm.hyperneat.hyperneat import HyperNEATConn
+from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat import HyperNEATConn
 
 
 class HyperNEATConnImproved(HyperNEATConn):
@@ -20,3 +20,11 @@ class HyperNEATConnImproved(HyperNEATConn):
             idx_width=idx_width,
             float_width=precision + 3,
         )
+    
+    def to_dict(self, state, conn):
+        in_idx, out_idx, weight = conn[:3]
+        return {
+            "in": int(in_idx),
+            "out": int(out_idx),
+            "weight": float(weight),
+        }

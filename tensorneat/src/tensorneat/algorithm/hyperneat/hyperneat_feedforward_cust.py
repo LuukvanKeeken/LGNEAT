@@ -4,12 +4,12 @@ HyperNEAT with Feedforward Substrate and genome
 
 from typing import Callable
 
-from tensorneat.algorithm.hyperneat.substrate import *
-from tensorneat.algorithm.hyperneat.hyperneat import HyperNEAT, HyperNEATNode, HyperNEATConn
-from hyperneat_conn_improved import HyperNEATConnImproved
-from tensorneat.common import ACT, AGG
-from tensorneat.algorithm import NEAT
-from tensorneat.genome import DefaultGenome
+from tensorneat.src.tensorneat.algorithm.hyperneat.substrate import *
+from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat import HyperNEAT, HyperNEATNode, HyperNEATConn
+from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_conn_improved import HyperNEATConnImproved
+from tensorneat.src.tensorneat.common import ACT, AGG
+from tensorneat.src.tensorneat.algorithm import NEAT
+from tensorneat.src.tensorneat.genome import DefaultGenome
 
 
 class HyperNEATFeedForwardCust(HyperNEAT):
