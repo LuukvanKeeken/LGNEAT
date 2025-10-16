@@ -36,3 +36,14 @@ class SympyMean(sp.Function):
     @classmethod
     def eval(cls, z):
         return sp.Add(*z) / len(z)
+    
+
+class FilterNans(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        # Assuming z is a list of sympy expressions, filter out NaNs
+        filtered = [zi for zi in z if not zi.has(sp.nan)]
+        if len(filtered) == 2:
+            return sp.Matrix(filtered)
+        else:
+            raise ValueError("FilterNans expects exactly two non-NaN values.")

@@ -98,3 +98,11 @@ class SympyClip(sp.Function):
 
     def _latex(self, printer):
         return rf"\mathrm{{clip}}\left({sp.latex(self.args[0])}, {self.args[1]}, {self.args[2]}\right)"
+
+
+class SympyNand(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("NAND function requires exactly two inputs.")
+        return 1 - z.args[0] * z.args[1]

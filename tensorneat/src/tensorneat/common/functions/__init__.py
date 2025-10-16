@@ -19,6 +19,7 @@ act_name2jnp = {
     "log": log_,
     "exp": exp_,
     "abs": abs_,
+    "nand": nand_,
 }
 
 act_name2sympy = {
@@ -35,6 +36,7 @@ act_name2sympy = {
     "exp": SympyExp,
     "abs": SympyAbs,
     "clip": SympyClip,
+    "nand": SympyNand,
 }
 
 agg_name2jnp = {
@@ -44,6 +46,7 @@ agg_name2jnp = {
     "min": min_,
     "maxabs": maxabs_,
     "mean": mean_,
+    "filter_nans": filter_nans_,
 }
 
 agg_name2sympy = {
@@ -53,6 +56,7 @@ agg_name2sympy = {
     "min": SympyMin,
     "maxabs": SympyMaxabs,
     "mean": SympyMean,
+    "filter_nans": FilterNans,
 }
 
 ACT = FunctionManager(act_name2jnp, act_name2sympy)

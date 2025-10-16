@@ -27,3 +27,12 @@ def mean_(z):
     sumation = sum_(z)
     valid_count = jnp.sum(~jnp.isnan(z), axis=0)
     return sumation / valid_count
+
+# Return an array containing only the non-NaN values from z.
+# There will always be exactly 2 non-NaN values.
+def filter_nans_(z):
+    
+    mask = ~jnp.isnan(z)
+    idxs = jnp.nonzero(mask, size=2, fill_value=0)[0]
+    return z[idxs]
+

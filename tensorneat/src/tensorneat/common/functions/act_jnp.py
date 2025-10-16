@@ -55,3 +55,11 @@ def exp_(z):
 
 def abs_(z):
     return jnp.abs(z)
+
+
+# NAND gate operation with z having two elements
+# Should raise some error if z does not have exactly two elements
+def nand_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return 1 - jnp.prod(z)

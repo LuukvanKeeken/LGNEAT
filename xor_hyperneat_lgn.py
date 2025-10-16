@@ -1,7 +1,7 @@
 from tensorneat.src.tensorneat.pipeline import Pipeline
 from tensorneat.src.tensorneat.algorithm.neat import NEAT
-from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForward, MLPSubstrateLEO
-from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_feedforward_cust_two_inputs import HyperNEATFeedForwardCustTwoInputs
+from tensorneat.src.tensorneat.algorithm.hyperneat import LGNSubstrateLEO
+from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForwardLGN
 from tensorneat.src.tensorneat.genome import DefaultGenome
 from tensorneat.src.tensorneat.common import ACT
 import jax.numpy as jnp
@@ -20,18 +20,18 @@ if not os.path.exists("results"):
 # Create directory in results with current timestamp,
 # if it does not exist
 timestamp = time.strftime("%Y%m%d-%H%M%S")
-if not os.path.exists(f"results/{timestamp}_mlp_two_inputs"):
-    os.makedirs(f"results/{timestamp}_mlp_two_inputs")
+if not os.path.exists(f"results/{timestamp}_lgn"):
+    os.makedirs(f"results/{timestamp}_lgn")
 
 # Create a directory in results/timestamp for images
-if not os.path.exists(f"results/{timestamp}_mlp_two_inputs/imgs"):
-    os.makedirs(f"results/{timestamp}_mlp_two_inputs/imgs")
+if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
+    os.makedirs(f"results/{timestamp}_lgn/imgs")
 
 if __name__ == "__main__":
 
-    algorithm=HyperNEATFeedForwardCustTwoInputs(
-            substrate=MLPSubstrateLEO(
-                layers=[4, 50, 50, 1],
+    algorithm=HyperNEATFeedForwardLGN(
+            substrate=LGNSubstrateLEO(
+                layers=[3, 5, 5, 1],
             ),
             neat=NEAT(
                 pop_size=1000,
@@ -39,13 +39,13 @@ if __name__ == "__main__":
                 survival_threshold=0.01,
                 genome=DefaultGenome(
                     num_inputs=4,  # size of query coors
-                    num_outputs=2,
+                    num_outputs=1,
                     init_hidden_layers=(),
                     output_transform=ACT.tanh,
                 ),
             ),
-            activation=ACT.tanh,
-            output_transform=ACT.sigmoid,
+            activation=ACT.nand,
+            output_transform=ACT.identity,
         )
     
     pipeline = Pipeline(
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     )
 
     print("Starting training ...")
-    with open(f"results/{timestamp}_mlp_two_inputs/log.txt", "w") as f_log:
+    with open(f"results/{timestamp}_lgn/log.txt", "w") as f_log:
         with contextlib.redirect_stdout(f_log):
 
             # initialize state
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     print(f"Finished training")
 
-    with open(f"results/{timestamp}_mlp_two_inputs/best.txt", "w") as f_best:
+    with open(f"results/{timestamp}_lgn/best.txt", "w") as f_best:
         with contextlib.redirect_stdout(f_best):
             # show result
             pipeline.show(state, best)
@@ -77,12 +77,12 @@ if __name__ == "__main__":
             # visualize the best individual
             network = algorithm.neat.genome.network_dict(state, *best)
             print(algorithm.neat.genome.repr(state, *best))
-            algorithm.neat.genome.visualize(network, save_path=f"results/{timestamp}_mlp_two_inputs/imgs/neat_CPPN_network.svg")
+            algorithm.neat.genome.visualize(network, save_path=f"results/{timestamp}_lgn/imgs/neat_CPPN_network.svg")
 
             transformed = algorithm.transform(state, best)
             seqs, h_nodes, h_conns, u_conns = transformed
             hyper_network = algorithm.hyper_genome.network_dict(state, h_nodes, h_conns)
             print(algorithm.hyper_genome.repr(state, h_nodes, h_conns))
-            algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_mlp_two_inputs/imgs/hyperneat_network.svg")
+            algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network.svg")
 
     
