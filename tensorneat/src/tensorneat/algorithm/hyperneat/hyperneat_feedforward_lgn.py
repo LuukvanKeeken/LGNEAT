@@ -1,11 +1,11 @@
-from typing import Callable
+from typing import Callable, Sequence, Union, Optional
 
 import jax
 from jax import vmap, numpy as jnp
 
 from tensorneat.src.tensorneat.algorithm.hyperneat.substrate import *
 from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat import HyperNEAT, HyperNEATConn
-from tensorneat.src.tensorneat.common import ACT, AGG
+from tensorneat.src.tensorneat.common import ACT, AGG, apply_activation
 from tensorneat.src.tensorneat.algorithm import NEAT
 from tensorneat.src.tensorneat.genome import DefaultGenomeLGN, BaseNode
 
@@ -86,24 +86,67 @@ class HyperNEATFeedForwardLGN(HyperNEAT):
 
         
 
-        all_masks = jax.vmap(mask_for_post)(h_nodes)
+        all_masks = jax.vmap(mask_for_post)(h_nodes[:, 0])
         final_mask = jnp.any(all_masks, axis=0)
         h_conns = h_conns.at[:, 2].set(jnp.where(final_mask, 1.0, jnp.nan))
         return h_conns
     
 
 class HyperNEATLGNNode(BaseNode):
+
+    custom_attrs = ["activation_idx"]
+
     def __init__(
         self,
         aggregation=AGG.filter_nans,
-        activation=ACT.nand,
+        activation_default: Optional[Callable] = None,
+        activation_options: Union[Callable, Sequence[Callable]] = ACT.nand,
     ):
         super().__init__()
         self.aggregation = aggregation
-        self.activation = activation
+        
+
+        if isinstance(activation_options, Callable):
+            activation_options = [activation_options]
+
+        
+
+        if activation_default is None:
+            activation_default = activation_options[0]
+
+        self.activation_default = activation_options.index(activation_default)
+        self.activation_options = activation_options
+        self.activation_indices = jnp.arange(len(activation_options))
+
+
+
+    def new_random_attrs(self, state, randkey):
+
+        # Randomly select activation function
+        randkey, subkey = jax.random.split(randkey)
+        activation_idx = jax.random.choice(subkey, self.activation_indices)
+
+        return jnp.array([activation_idx])
+
+
+
+
 
     def forward(self, state, attrs, inputs, is_output_node=False):
-        return self.activation(self.aggregation(inputs))
+        act = int(attrs[0])
+
+        return apply_activation(act, inputs, self.activation_options, self.aggregation)
+    
+
+    
+    def repr(self, state, node, precision=2, idx_width=3, func_width=8):
+        idx = node[0]
+        other_number = node[1]
+
+        idx = int(idx)
+        return "{}(idx={:<{idx_width}}, other_number={:<{idx_width}})".format(
+            self.__class__.__name__, idx, other_number, idx_width=idx_width
+        )
     
 
 class HyperNEATLGNConn(HyperNEATConn):

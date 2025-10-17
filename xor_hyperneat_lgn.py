@@ -34,7 +34,7 @@ if __name__ == "__main__":
                 layers=[3, 5, 5, 1],
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=10000
+        generation_limit=1
     )
 
     print("Starting training ...")
