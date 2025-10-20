@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 genome=DefaultGenome(
                     num_inputs=4,  # size of query coors
                     num_outputs=1,
-                    init_hidden_layers=(),
+                    init_hidden_layers=(2,),
                     output_transform=ACT.tanh,
                 ),
             ),
@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
             print(f"Total time: {time.time() - start_time:.2f} seconds")
             print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds")
-            
+
             # show result
             pipeline.show(state, best)
 
