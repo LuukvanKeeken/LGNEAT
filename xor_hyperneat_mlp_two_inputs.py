@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=1000
+        generation_limit=2
     )
 
     print("Starting training ...")
@@ -71,8 +71,10 @@ if __name__ == "__main__":
 
     with open(f"results/{timestamp}_mlp_two_inputs/best.txt", "w") as f_best:
         with contextlib.redirect_stdout(f_best):
+            start_time_test = time.time()
             # show result
             pipeline.show(state, best)
+            print(f"Testing time: {time.time() - start_time_test:.2f} seconds\n")
 
             # visualize the best individual
             network = algorithm.neat.genome.network_dict(state, *best)
