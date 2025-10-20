@@ -77,9 +77,10 @@ def analysis_substrate(layers, coor_range):
     ordered_nodes = [*node_layers[0], *node_layers[-1]]
     for layer in node_layers[1:-1]:
         ordered_nodes.extend(layer)
-    nodes = np.array(ordered_nodes)[:, np.newaxis]
-    zeros = np.zeros((nodes.shape[0], 1), dtype=nodes.dtype)
-    nodes = np.concatenate([nodes, zeros], axis=1)  # shape (x, 2)
+    
+    # Initialize nodes with room for activation function indices
+    nodes = np.zeros((len(ordered_nodes), 2))
+    nodes[:, 0] = ordered_nodes
     conns = np.zeros(
         (len(correspond_keys), 4), dtype=np.float32
     )  # input_idx, output_idx, weight, leo
