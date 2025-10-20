@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     algorithm=HyperNEATFeedForwardLGN(
             substrate=LGNSubstrateLEO(
-                layers=[3, 5, 5, 1],
+                layers=[3, 10, 8, 6, 4, 1],
             ),
             neat=NEAT(
                 pop_size=1000,
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 genome=DefaultGenome(
                     num_inputs=4,  # size of query coors
                     num_outputs=1,
-                    init_hidden_layers=(2,),
+                    init_hidden_layers=(),
                     output_transform=ACT.tanh,
                 ),
             ),
