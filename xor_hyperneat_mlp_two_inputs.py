@@ -73,8 +73,10 @@ if __name__ == "__main__":
         with contextlib.redirect_stdout(f_best):
             start_time_test = time.time()
             # show result
-            pipeline.show(state, best)
+            for i in range(20):
+                pipeline.show(state, best)
             print(f"Testing time: {time.time() - start_time_test} seconds\n")
+            print(f"Average time per test: {(time.time() - start_time_test)/20} seconds\n")
 
             # visualize the best individual
             network = algorithm.neat.genome.network_dict(state, *best)
