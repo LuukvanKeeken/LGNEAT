@@ -20,6 +20,7 @@ act_name2jnp = {
     "exp": exp_,
     "abs": abs_,
     "nand": nand_,
+    "nor": nor_,
 }
 
 act_name2sympy = {
@@ -37,6 +38,7 @@ act_name2sympy = {
     "abs": SympyAbs,
     "clip": SympyClip,
     "nand": SympyNand,
+    "nor": SympyNor,
 }
 
 agg_name2jnp = {

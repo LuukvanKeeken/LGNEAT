@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     algorithm=HyperNEATFeedForwardLGN(
             substrate=LGNSubstrateLEO(
-                layers=[3, 50, 50, 1],
+                layers=[3, 10, 10, 1],
             ),
             neat=NEAT(
                 pop_size=1000,
@@ -39,7 +39,7 @@ if __name__ == "__main__":
                 survival_threshold=0.01,
                 genome=DefaultGenome(
                     num_inputs=4,  # size of query coors
-                    num_outputs=1,
+                    num_outputs=3,
                     init_hidden_layers=(),
                     output_transform=ACT.tanh,
                 ),
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=100000,
+        generation_limit=1000,
         seed=3
     )
 
