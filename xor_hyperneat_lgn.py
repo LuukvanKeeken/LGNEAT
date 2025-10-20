@@ -78,7 +78,7 @@ if __name__ == "__main__":
             start_time_test = time.time()
             # show result
             pipeline.show(state, best)
-            print(f"Testing time: {time.time() - start_time_test:.2f} seconds\n")
+            print(f"Testing time: {time.time() - start_time_test} seconds\n")
 
             # visualize the best individual
             network = algorithm.neat.genome.network_dict(state, *best)
