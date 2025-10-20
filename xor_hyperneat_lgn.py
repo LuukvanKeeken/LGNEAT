@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     algorithm=HyperNEATFeedForwardLGN(
             substrate=LGNSubstrateLEO(
-                layers=[3, 5, 5, 1],
+                layers=[3, 2, 1],
             ),
             neat=NEAT(
                 pop_size=10,
@@ -51,7 +51,8 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=1
+        generation_limit=1,
+        seed=3
     )
 
     print("Starting training ...")

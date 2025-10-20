@@ -78,6 +78,19 @@ def apply_activation(idx, z, act_funcs):
 
     return res
 
+def apply_activation_lgn(idx, z, act_funcs):
+    """
+    calculate activation function for each lgn node
+    """
+    idx = jnp.asarray(idx, dtype=jnp.int32)
+    # change idx from float to int
+
+    # -1 means identity activation
+    res = jax.lax.switch(idx, act_funcs, z)
+
+    return res
+
+
 def apply_aggregation(idx, z, agg_funcs):
     """
     calculate activation function for inputs of node
@@ -89,6 +102,20 @@ def apply_aggregation(idx, z, agg_funcs):
         lambda: jnp.nan,  # all inputs are nan
         lambda: jax.lax.switch(idx, agg_funcs, z),  # otherwise
     )
+
+
+def apply_aggregation_lgn(idx, z, agg_funcs):
+    """
+    calculate activation function for inputs of lgn node
+    """
+    idx = jnp.asarray(idx, dtype=jnp.int32)
+
+    return jax.lax.cond(
+        jnp.all(jnp.isnan(z)),
+        lambda: jnp.array([jnp.nan, jnp.nan]),  # all inputs are nan
+        lambda: jax.lax.switch(idx, agg_funcs, z),  # otherwise
+    )
+
 
 def get_func_name(func):
     name = func.__name__

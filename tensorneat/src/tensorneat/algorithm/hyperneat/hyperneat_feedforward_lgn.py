@@ -5,7 +5,7 @@ from jax import vmap, numpy as jnp
 
 from tensorneat.src.tensorneat.algorithm.hyperneat.substrate import *
 from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat import HyperNEAT, HyperNEATConn
-from tensorneat.src.tensorneat.common import ACT, AGG, apply_activation
+from tensorneat.src.tensorneat.common import ACT, AGG, apply_activation_lgn, apply_aggregation_lgn, get_func_name
 from tensorneat.src.tensorneat.algorithm import NEAT
 from tensorneat.src.tensorneat.genome import DefaultGenomeLGN, BaseNode
 
@@ -19,7 +19,7 @@ class HyperNEATFeedForwardLGN(HyperNEAT):
         max_weight: float = 5.0,
         aggregation: Callable = AGG.filter_nans,
         activation: Callable = ACT.nand,
-        output_transform: Callable = ACT.nand,
+        output_transform: Callable = ACT.identity,
     ):
         assert (
             substrate.query_coors.shape[1] == neat.num_inputs
@@ -36,7 +36,7 @@ class HyperNEATFeedForwardLGN(HyperNEAT):
             num_outputs=substrate.num_outputs,
             max_nodes=substrate.nodes_cnt,
             max_conns=substrate.conns_cnt,
-            node_gene=HyperNEATLGNNode(aggregation, activation),
+            node_gene=HyperNEATLGNNode(activation_default=activation),
             conn_gene=HyperNEATLGNConn(),
             output_transform=output_transform,
         )
@@ -98,18 +98,14 @@ class HyperNEATLGNNode(BaseNode):
 
     def __init__(
         self,
-        aggregation=AGG.filter_nans,
         activation_default: Optional[Callable] = None,
         activation_options: Union[Callable, Sequence[Callable]] = ACT.nand,
     ):
         super().__init__()
-        self.aggregation = aggregation
         
-
+        
         if isinstance(activation_options, Callable):
             activation_options = [activation_options]
-
-        
 
         if activation_default is None:
             activation_default = activation_options[0]
@@ -118,6 +114,15 @@ class HyperNEATLGNNode(BaseNode):
         self.activation_options = activation_options
         self.activation_indices = jnp.arange(len(activation_options))
 
+        # For LGN nodes, aggregation is always filter_nans
+        self.aggregation_default = AGG.filter_nans
+
+
+    def new_identity_attrs(self, state):
+
+        activation_index = self.activation_default
+
+        return jnp.array([activation_index])
 
 
     def new_random_attrs(self, state, randkey):
@@ -133,19 +138,23 @@ class HyperNEATLGNNode(BaseNode):
 
 
     def forward(self, state, attrs, inputs, is_output_node=False):
-        act = int(attrs[0])
+        act = attrs[0]
 
-        return apply_activation(act, inputs, self.activation_options, self.aggregation)
+        z = apply_aggregation_lgn(0, inputs, [self.aggregation_default])
+
+        return apply_activation_lgn(act, z, self.activation_options)
     
 
-    
+
     def repr(self, state, node, precision=2, idx_width=3, func_width=8):
         idx = node[0]
-        other_number = node[1]
+        act_func_idx = int(node[1])
+
+        act_func = get_func_name(self.activation_options[act_func_idx])
 
         idx = int(idx)
-        return "{}(idx={:<{idx_width}}, other_number={:<{idx_width}})".format(
-            self.__class__.__name__, idx, other_number, idx_width=idx_width
+        return "{}(idx={:<{idx_width}}, activation={:<{func_width}})".format(
+            self.__class__.__name__, idx, act_func, idx_width=idx_width, func_width=func_width
         )
     
 
