@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=100
+        generation_limit=1000
     )
 
     print("Starting training ...")
@@ -65,7 +65,7 @@ if __name__ == "__main__":
             state, best = pipeline.auto_run(state)
 
             print(f"Total time: {time.time() - start_time:.2f} seconds")
-            print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds")
+            print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds\n")
 
     print(f"Finished training")
 

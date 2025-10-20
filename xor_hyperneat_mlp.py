@@ -36,7 +36,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=100
+        generation_limit=1000
     )
 
     # initialize state
@@ -44,6 +44,11 @@ if __name__ == "__main__":
     # print(state)
     # run until terminate
     state, best = pipeline.auto_run(state)
+
+    print(f"Total time: {time.time() - start_time:.2f} seconds")
+    print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds\n")
+
+
     # show result
     pipeline.show(state, best)
 
@@ -58,5 +63,4 @@ if __name__ == "__main__":
     print(algorithm.hyper_genome.repr(state, h_nodes, h_conns))
     algorithm.hyper_genome.visualize(hyper_network, save_path="./imgs/xor_hyperneat_network_mlp.svg")
 
-    print(f"Total time: {time.time() - start_time:.2f} seconds")
-    print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds")
+    
