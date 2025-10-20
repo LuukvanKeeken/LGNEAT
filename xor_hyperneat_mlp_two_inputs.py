@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=10000
+        generation_limit=100
     )
 
     print("Starting training ...")
