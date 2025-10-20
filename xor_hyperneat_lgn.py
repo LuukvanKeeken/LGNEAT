@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=2,
+        generation_limit=100000,
         seed=3
     )
 
@@ -77,10 +77,8 @@ if __name__ == "__main__":
 
             start_time_test = time.time()
             # show result
-            for i in range(20):
-                pipeline.show(state, best)
+            pipeline.show(state, best)
             print(f"Testing time: {time.time() - start_time_test} seconds\n")
-            print(f"Average time per test: {(time.time() - start_time_test)/20} seconds\n")
 
             # visualize the best individual
             network = algorithm.neat.genome.network_dict(state, *best)
