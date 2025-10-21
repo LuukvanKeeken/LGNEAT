@@ -171,7 +171,7 @@ class Pipeline(StatefulBaseClass):
 
                 # overwrite the previous progress line instead of appending
                 # move to file start, write the line, then truncate the rest
-                if gen%100 == 0:
+                if (gen+1)%100 == 0:
                     f_log.seek(0)
                     f_log.write(f"Generation {gen+1}/{self.generation_limit}\n")
                     f_log.truncate()
