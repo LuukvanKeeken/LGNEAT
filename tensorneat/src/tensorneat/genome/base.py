@@ -204,7 +204,7 @@ class BaseGenome(StatefulBaseClass):
         s += f"\tNodes:\n"
         for node in nodes:
             if np.isnan(node[0]):
-                break
+                continue
             s += f"\t\t{self.node_gene.repr(state, node, precision=precision)}"
             node_idx = int(node[0])
             if np.isin(node_idx, self.input_idx):
@@ -216,7 +216,7 @@ class BaseGenome(StatefulBaseClass):
         s += f"\tConns:\n"
         for conn in conns:
             if np.isnan(conn[0]):
-                break
+                continue
             s += f"\t\t{self.conn_gene.repr(state, conn, precision=precision)}\n"
         return s
 
