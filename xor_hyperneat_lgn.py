@@ -29,18 +29,24 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
+    layers = [3, 2, 1]
+
+    neat_inputs = 4
+    neat_outputs = 3
+    neat_hidden_layers = ()
+
     algorithm=HyperNEATFeedForwardLGN(
             substrate=LGNSubstrateLEO(
-                layers=[3, 50, 50, 1],
+                layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
-                    num_inputs=4,  # size of query coors
-                    num_outputs=3,
-                    init_hidden_layers=(),
+                    num_inputs=neat_inputs,  # size of query coors
+                    num_outputs=neat_outputs,
+                    init_hidden_layers=neat_hidden_layers,
                     output_transform=ACT.tanh,
                 ),
             ),
@@ -51,9 +57,23 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=100000,
+        generation_limit=2,
         seed=3
     )
+
+
+    with open(f"results/{timestamp}_lgn/settings.txt", "w") as f_settings:
+        f_settings.write(f"Generations: {pipeline.generation_limit}\n")
+        f_settings.write(f"Population size: {algorithm.neat.pop_size}\n")
+        f_settings.write(f"Substrate layers: {layers}\n")
+        f_settings.write(f"Species: {algorithm.neat.species_controller.species_size}\n")
+        f_settings.write(f"NEAT init. shape {neat_inputs, neat_hidden_layers, neat_outputs}\n")
+        f_settings.write(f"Seed: {pipeline.seed}\n")
+        f_settings.write(f"Problem task: {pipeline.problem.__class__.__name__}\n")
+
+
+
+
 
     print("Starting training ...")
     with open(f"results/{timestamp}_lgn/log.txt", "w") as f_log:

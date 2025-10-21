@@ -114,23 +114,23 @@ class HyperNEATFeedForwardLGN(HyperNEAT):
         return h_conns, h_nodes
     
 
-    def keep_top2_per_postsynaptic_old(self, h_conns, h_nodes):
-        post_ids = h_conns[:, 1]
-        LEO_values = h_conns[:, 3]
-        # Use h_nodes as the list of post-synaptic neuron indices
-        def mask_for_post(post):
-            mask = (post_ids == post)
-            post_leos = jnp.where(mask, LEO_values, -jnp.inf)
-            top2 = jnp.argsort(post_leos)[-2:]
-            top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
-            return top2_mask & mask
+    # def keep_top2_per_postsynaptic_old(self, h_conns, h_nodes):
+    #     post_ids = h_conns[:, 1]
+    #     LEO_values = h_conns[:, 3]
+    #     # Use h_nodes as the list of post-synaptic neuron indices
+    #     def mask_for_post(post):
+    #         mask = (post_ids == post)
+    #         post_leos = jnp.where(mask, LEO_values, -jnp.inf)
+    #         top2 = jnp.argsort(post_leos)[-2:]
+    #         top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
+    #         return top2_mask & mask
 
         
 
-        all_masks = jax.vmap(mask_for_post)(h_nodes[:, 0])
-        final_mask = jnp.any(all_masks, axis=0)
-        h_conns = h_conns.at[:, 2].set(jnp.where(final_mask, 1.0, jnp.nan))
-        return h_conns
+    #     all_masks = jax.vmap(mask_for_post)(h_nodes[:, 0])
+    #     final_mask = jnp.any(all_masks, axis=0)
+    #     h_conns = h_conns.at[:, 2].set(jnp.where(final_mask, 1.0, jnp.nan))
+    #     return h_conns
     
 
 class HyperNEATLGNNode(BaseNode):
@@ -209,9 +209,9 @@ class HyperNEATLGNConn(HyperNEATConn):
         in_idx = int(in_idx)
         out_idx = int(out_idx)
         weight = round(float(weight), precision)
-        leo_value = round(float(leo_value), precision)
-        nand = round(float(nand), precision)
-        nor = round(float(nor), precision)
+        leo_value = round(float(leo_value), precision*2)
+        nand = round(float(nand), precision*2)
+        nor = round(float(nor), precision*2)
 
         return "{}(in: {:<{idx_width}}, out: {:<{idx_width}}, weight: {:<{float_width}}, leo: {:<{float_width}}, nand: {:<{float_width}}, nor: {:<{float_width}})".format(
             self.__class__.__name__,
