@@ -288,7 +288,9 @@ class DefaultGenome(BaseGenome):
         node2layer = {
             node: layer for layer, nodes in enumerate(topo_layers) for node in nodes
         }
-
+        print(f"Node to layer mapping: {node2layer}")
+        print(f"Topo layers: {topo_layers}")
+        print(f"Topo order: {topo_order}")
         # reorder nodes in each layer to make them more compact
         subset_key = {}
         for layer, nodes in enumerate(topo_layers):
@@ -316,7 +318,7 @@ class DefaultGenome(BaseGenome):
         if not isinstance(color, tuple):
             color = (color, color, color)
 
-        print(f"Node to layer mapping: {node2layer}")
+        
         for node in topo_order:
             if node in input_idx:
                 G.add_node(node, subset=node2layer[node], size=size[0], color=color[0])
