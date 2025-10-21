@@ -198,6 +198,13 @@ class HyperNEATLGNNode(BaseNode):
             self.__class__.__name__, idx, act_func, idx_width=idx_width, func_width=func_width
         )
     
+    def to_dict(self, state, node):
+        node_idx, act_func_idx = node[:2]
+        return {
+            "idx": int(node_idx),
+            "act_func_idx": int(act_func_idx),
+        }
+    
 
 class HyperNEATLGNConn(HyperNEATConn):
 

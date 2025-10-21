@@ -64,7 +64,7 @@ class DefaultGenomeLGN(DefaultGenome):
         rotate=0,
         reverse_node_order=False,
         size=(300, 300, 300),
-        color=("yellow", "white", "blue"),
+        color=("yellow", "white", "blue", "gray"),
         with_labels=False,
         edgecolors="k",
         arrowstyle="->",
@@ -119,7 +119,16 @@ class DefaultGenomeLGN(DefaultGenome):
             elif node in output_idx:
                 G.add_node(node, subset=node2layer[node], size=size[2], color=color[2])
             else:
-                G.add_node(node, subset=node2layer[node], size=size[1], color=color[1])
+                # Colour the hidden nodes based on their activation function
+                if network["nodes"][node].get("idx") == node:
+                    if network["nodes"][node].get("act_func_idx") == 0: # nand
+                        G.add_node(node, subset=node2layer[node], size=size[1], color=color[1])
+                    else: # nor
+                        G.add_node(node, subset=node2layer[node], size=size[1], color=color[3])
+                else:
+                    raise ValueError("Node idx does not match the key in network['nodes']")
+
+
 
         for conn in conns_list:
             G.add_edge(conn[0], conn[1])
