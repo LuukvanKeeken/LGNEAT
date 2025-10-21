@@ -133,7 +133,7 @@ class Pipeline(StatefulBaseClass):
 
         return state.update(randkey=randkey), previous_pop, fitnesses
 
-    def auto_run(self, state):
+    def auto_run(self, state, filename):
         print("start compile")
         tic = time.time()
         with warnings.catch_warnings():
@@ -153,19 +153,24 @@ class Pipeline(StatefulBaseClass):
             f"compile finished, cost time: {time.time() - tic:.6f}s",
         )
 
-        for _ in range(self.generation_limit):
+        with open(filename, "w") as f_log:
 
-            self.generation_timestamp = time.time()
+            for gen in range(self.generation_limit):
 
-            state, previous_pop, fitnesses = compiled_step(state)
+                self.generation_timestamp = time.time()
 
-            fitnesses = jax.device_get(fitnesses)
+                state, previous_pop, fitnesses = compiled_step(state)
 
-            self.analysis(state, previous_pop, fitnesses)
+                fitnesses = jax.device_get(fitnesses)
 
-            if max(fitnesses) >= self.fitness_target:
-                print("Fitness limit reached!")
-                break
+                self.analysis(state, previous_pop, fitnesses)
+
+                if max(fitnesses) >= self.fitness_target:
+                    print("Fitness limit reached!")
+                    break
+
+                f_log.write(f"Generation {gen+1}/{self.generation_limit}\n")
+                f_log.flush()
 
         if int(state.generation) >= self.generation_limit:
             print("Generation limit reached!")

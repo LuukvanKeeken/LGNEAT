@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=10,
+                pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=2,
+        generation_limit=10000,
         seed=3
     )
 
@@ -83,7 +83,10 @@ if __name__ == "__main__":
             state = pipeline.setup()
             # print(state)
             # run until terminate
-            state, best = pipeline.auto_run(state)
+
+            filename = f"results/{timestamp}_lgn/current_gen.txt"
+
+            state, best = pipeline.auto_run(state, filename)
 
             
 
