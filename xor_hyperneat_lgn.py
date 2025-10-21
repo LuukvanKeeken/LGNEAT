@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=500,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
