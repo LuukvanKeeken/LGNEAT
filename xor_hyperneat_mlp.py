@@ -43,7 +43,8 @@ if __name__ == "__main__":
     state = pipeline.setup()
     # print(state)
     # run until terminate
-    state, best = pipeline.auto_run(state)
+    filename = f"./imgs/current_gen.txt"
+    state, best = pipeline.auto_run(state, filename)
 
     print(f"Total time: {time.time() - start_time:.2f} seconds")
     print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds\n")
