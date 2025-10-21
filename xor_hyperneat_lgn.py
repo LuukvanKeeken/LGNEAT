@@ -29,7 +29,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [3, 10, 10, 10, 1]
+    layers = [3, 2, 1]
 
     neat_inputs = 4
     neat_outputs = 3
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=10000,
+        generation_limit=1,
         seed=3
     )
 

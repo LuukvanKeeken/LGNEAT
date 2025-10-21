@@ -316,6 +316,7 @@ class DefaultGenome(BaseGenome):
         if not isinstance(color, tuple):
             color = (color, color, color)
 
+        print(f"Node to layer mapping: {node2layer}")
         for node in topo_order:
             if node in input_idx:
                 G.add_node(node, subset=node2layer[node], size=size[0], color=color[0])
