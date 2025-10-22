@@ -98,6 +98,12 @@ class SympyClip(sp.Function):
 
     def _latex(self, printer):
         return rf"\mathrm{{clip}}\left({sp.latex(self.args[0])}, {self.args[1]}, {self.args[2]}\right)"
+    
+
+class SympyGaussian(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        return sp.exp(-z**2)
 
 
 class SympyNand(sp.Function):

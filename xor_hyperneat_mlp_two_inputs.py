@@ -31,10 +31,10 @@ if __name__ == "__main__":
 
     algorithm=HyperNEATFeedForwardCustTwoInputs(
             substrate=MLPSubstrateLEO(
-                layers=[4, 100, 100, 1],
+                layers=[4, 2, 1],
             ),
             neat=NEAT(
-                pop_size=500,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=10000
+        generation_limit=2
     )
 
     print("Starting training ...")

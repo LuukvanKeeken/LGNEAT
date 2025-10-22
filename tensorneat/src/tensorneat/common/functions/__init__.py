@@ -19,6 +19,7 @@ act_name2jnp = {
     "log": log_,
     "exp": exp_,
     "abs": abs_,
+    "gaussian": gaussian_,
     "nand": nand_,
     "nor": nor_,
 }
@@ -37,6 +38,7 @@ act_name2sympy = {
     "exp": SympyExp,
     "abs": SympyAbs,
     "clip": SympyClip,
+    "gaussian": SympyGaussian,
     "nand": SympyNand,
     "nor": SympyNor,
 }

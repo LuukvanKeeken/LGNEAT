@@ -2,7 +2,7 @@ from tensorneat.src.tensorneat.pipeline import Pipeline
 from tensorneat.src.tensorneat.algorithm.neat import NEAT
 from tensorneat.src.tensorneat.algorithm.hyperneat import LGNSubstrateLEO
 from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForwardLGN
-from tensorneat.src.tensorneat.genome import DefaultGenome
+from tensorneat.src.tensorneat.genome import DefaultGenomeCPPN
 from tensorneat.src.tensorneat.common import ACT
 import jax.numpy as jnp
 from tensorneat.src.tensorneat.problem.func_fit import XOR3d
@@ -29,7 +29,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [3, 100, 100, 1]
+    layers = [3, 5, 5, 5, 1]
 
     neat_inputs = 4
     neat_outputs = 3
@@ -43,11 +43,11 @@ if __name__ == "__main__":
                 pop_size=500,
                 species_size=20,
                 survival_threshold=0.01,
-                genome=DefaultGenome(
+                genome=DefaultGenomeCPPN(
                     num_inputs=neat_inputs,  # size of query coors
                     num_outputs=neat_outputs,
                     init_hidden_layers=neat_hidden_layers,
-                    output_transform=ACT.tanh,
+                    output_transform=ACT.sigmoid,
                 ),
             ),
             activation=ACT.nand,
