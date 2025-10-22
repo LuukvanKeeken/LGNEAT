@@ -8,10 +8,10 @@ from tensorneat.src.tensorneat.common import ACT, AGG
 
 
 
-# define custom activate function and register it
-def square(x):
-    return x ** 2
-ACT.add_func("square", square)
+# # define custom activate function and register it
+# def square(x):
+#     return x ** 2
+# ACT.add_func("square", square)
 
 if __name__ == "__main__":
     # Check if input coordinates are inside a circle
