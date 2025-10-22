@@ -58,7 +58,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=50000,
+        generation_limit=1000000,
         seed=3
     )
 
