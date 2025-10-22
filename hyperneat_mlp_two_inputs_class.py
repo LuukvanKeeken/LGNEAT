@@ -5,7 +5,7 @@ from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_feedforward_cust_tw
 from tensorneat.src.tensorneat.genome import DefaultGenome
 from tensorneat.src.tensorneat.common import ACT
 import jax.numpy as jnp
-from tensorneat.src.tensorneat.problem.func_fit import XOR3d
+from tensorneat.src.tensorneat.problem.func_fit import CustomFuncFit
 
 import time
 import os
@@ -29,8 +29,7 @@ if not os.path.exists(f"results/{timestamp}_mlp_two_inputs/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [4, 2, 1]
-
+    layers = [3, 10, 10, 1]
     neat_inputs = 4
     neat_outputs = 2
     neat_hidden_layers = ()
@@ -40,7 +39,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=10,
+                pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -54,10 +53,27 @@ if __name__ == "__main__":
             output_transform=ACT.sigmoid,
         )
     
+    # Check if input coordinates are inside a circle
+    # Return [1, 0] if inside, else [0, 1]
+    def inside_circle(inputs, radius=0.5):
+        x, y = inputs
+        res = jnp.square(x) + jnp.square(y)
+        
+        return jnp.where(res <= radius**2, jnp.array([1]), jnp.array([0]))
+    
+    inside_circle_problem = CustomFuncFit(
+        func = inside_circle,
+        low_bounds = [-1, -1],
+        upper_bounds = [1, 1],
+        method = "sample",
+        num_samples = 20
+    )
+
     pipeline = Pipeline(
         algorithm=algorithm,
-        problem=XOR3d(),
-        generation_limit=2
+        problem=inside_circle_problem,
+        generation_limit=10000,
+        seed=3
     )
 
     with open(f"results/{timestamp}_mlp_two_inputs/settings.txt", "w") as f_settings:
