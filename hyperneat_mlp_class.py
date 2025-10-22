@@ -30,7 +30,7 @@ if not os.path.exists(f"results/{timestamp}_mlp/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [3, 2, 2]
+    layers = [3, 10, 10, 1]
 
     neat_inputs = 4
     neat_outputs = 1
@@ -41,7 +41,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=100,
+                pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         x, y = inputs
         res = jnp.square(x) + jnp.square(y)
         
-        return jnp.where(res <= radius**2, jnp.array([1, 0]), jnp.array([0, 1]))
+        return jnp.where(res <= radius**2, jnp.array([1]), jnp.array([0]))
     
     inside_circle_problem = CustomFuncFit(
         func = inside_circle,

@@ -13,4 +13,4 @@ pip install -U "jax[cuda12]"
 
 
 #for 1 run:
-python3 "xor_hyperneat_mlp_class.py" 
+python3 "hyperneat_mlp_class.py" 
