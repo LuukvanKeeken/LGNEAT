@@ -47,7 +47,7 @@ if __name__ == "__main__":
             ),
         ),
         problem=inside_circle_problem,
-        generation_limit=10000,
+        generation_limit=3000,
         fitness_target=-1e-4,
         seed=42,
     )
