@@ -2,7 +2,7 @@ from tensorneat.src.tensorneat.pipeline import Pipeline
 from tensorneat.src.tensorneat.algorithm.neat import NEAT
 from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForward, MLPSubstrateLEO
 from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_feedforward_cust_two_inputs import HyperNEATFeedForwardCustTwoInputs
-from tensorneat.src.tensorneat.genome import DefaultGenome
+from tensorneat.src.tensorneat.genome import DefaultGenomeCPPN
 from tensorneat.src.tensorneat.common import ACT
 import jax.numpy as jnp
 from tensorneat.src.tensorneat.problem.func_fit import CustomFuncFit
@@ -42,11 +42,11 @@ if __name__ == "__main__":
                 pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
-                genome=DefaultGenome(
+                genome=DefaultGenomeCPPN(
                     num_inputs=neat_inputs,  # size of query coors
                     num_outputs=neat_outputs,
                     init_hidden_layers=neat_hidden_layers,
-                    output_transform=ACT.tanh,
+                    output_transform=ACT.sigmoid,
                 ),
             ),
             activation=ACT.tanh,
