@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     pipeline = Pipeline(
         algorithm=NEAT(
-            pop_size=10000,
+            pop_size=1000,
             species_size=20,
             survival_threshold=0.01,
             genome=DefaultGenome(
@@ -47,7 +47,7 @@ if __name__ == "__main__":
             ),
         ),
         problem=inside_circle_problem,
-        generation_limit=50,
+        generation_limit=10000,
         fitness_target=-1e-4,
         seed=42,
     )
@@ -55,6 +55,6 @@ if __name__ == "__main__":
     # initialize state
     state = pipeline.setup()
     # run until terminate
-    state, best = pipeline.auto_run(state)
+    state, best = pipeline.auto_run(state, "current_gen.txt")
     # show result
     pipeline.show(state, best)
