@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     neat_inputs = 4
     neat_outputs = 3
-    neat_hidden_layers = ()
+    neat_hidden_layers = (2,)
 
     algorithm=HyperNEATFeedForwardLGN(
             substrate=LGNSubstrateLEO(
