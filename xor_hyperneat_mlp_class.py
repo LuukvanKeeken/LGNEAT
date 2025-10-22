@@ -20,7 +20,7 @@ if __name__ == "__main__":
         x, y = inputs
         res = jnp.square(x) + jnp.square(y)
         
-        return jnp.where(res <= radius**2, jnp.array([1, 0]), jnp.array([0, 1]))
+        return jnp.where(res <= radius**2, jnp.array([1]), jnp.array([0]))
     
     inside_circle_problem = CustomFuncFit(
         func = inside_circle,
@@ -32,12 +32,12 @@ if __name__ == "__main__":
 
     pipeline = Pipeline(
         algorithm=NEAT(
-            pop_size=1000,
+            pop_size=5000,
             species_size=20,
             survival_threshold=0.01,
             genome=DefaultGenome(
                 num_inputs=2,
-                num_outputs=2,
+                num_outputs=1,
                 init_hidden_layers=(),
                 node_gene=BiasNode(
                     activation_options=[ACT.identity, ACT.inv, ACT.square],
