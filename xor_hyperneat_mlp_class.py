@@ -1,60 +1,19 @@
-from tensorneat.src.tensorneat.pipeline import Pipeline
-from tensorneat.src.tensorneat.algorithm.neat import NEAT
-from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForward, MLPSubstrate
-from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_feedforward_cust import HyperNEATFeedForwardCust
-from tensorneat.src.tensorneat.genome import DefaultGenome
-from tensorneat.src.tensorneat.common import ACT
 import jax.numpy as jnp
 
+from tensorneat.src.tensorneat.pipeline import Pipeline
+from tensorneat.src.tensorneat.algorithm.neat import NEAT
+from tensorneat.src.tensorneat.genome import DefaultGenome, BiasNode
 from tensorneat.src.tensorneat.problem.func_fit import CustomFuncFit
+from tensorneat.src.tensorneat.common import ACT, AGG
 
-import time
-import os
-import contextlib
 
-start_time = time.time()
 
-# Check if results directory exists, if not, create it
-if not os.path.exists("results"):
-    os.makedirs("results")
-
-# Create directory in results with current timestamp,
-# if it does not exist
-timestamp = time.strftime("%Y%m%d-%H%M%S")
-if not os.path.exists(f"results/{timestamp}_mlp"):
-    os.makedirs(f"results/{timestamp}_mlp")
-
-# Create a directory in results/timestamp for images
-if not os.path.exists(f"results/{timestamp}_mlp/imgs"):
-    os.makedirs(f"results/{timestamp}_mlp/imgs")
+# define custom activate function and register it
+def square(x):
+    return x ** 2
+ACT.add_func("square", square)
 
 if __name__ == "__main__":
-
-    layers = [3, 2, 2]
-
-    neat_inputs = 4
-    neat_outputs = 1
-    neat_hidden_layers = ()
-
-    algorithm=HyperNEATFeedForwardCust(
-            substrate=MLPSubstrate(
-                layers=layers,
-            ),
-            neat=NEAT(
-                pop_size=100,
-                species_size=20,
-                survival_threshold=0.01,
-                genome=DefaultGenome(
-                    num_inputs=neat_inputs,  # size of query coors
-                    num_outputs=neat_outputs,
-                    init_hidden_layers=neat_hidden_layers,
-                    output_transform=ACT.tanh,
-                ),
-            ),
-            activation=ACT.tanh,
-            output_transform=ACT.sigmoid,
-        )
-    
     # Check if input coordinates are inside a circle
     # Return [1, 0] if inside, else [0, 1]
     def inside_circle(inputs, radius=0.5):
@@ -72,53 +31,30 @@ if __name__ == "__main__":
     )
 
     pipeline = Pipeline(
-        algorithm=algorithm,
+        algorithm=NEAT(
+            pop_size=10000,
+            species_size=20,
+            survival_threshold=0.01,
+            genome=DefaultGenome(
+                num_inputs=2,
+                num_outputs=1,
+                init_hidden_layers=(),
+                node_gene=BiasNode(
+                    activation_options=[ACT.identity, ACT.inv, ACT.square],
+                    aggregation_options=[AGG.sum, AGG.product],
+                ),
+                output_transform=ACT.identity,
+            ),
+        ),
         problem=inside_circle_problem,
-        generation_limit=10000,
-        seed=3
+        generation_limit=50,
+        fitness_target=-1e-4,
+        seed=42,
     )
 
-    with open(f"results/{timestamp}_mlp/settings.txt", "w") as f_settings:
-        f_settings.write(f"Generations: {pipeline.generation_limit}\n")
-        f_settings.write(f"Population size: {algorithm.neat.pop_size}\n")
-        f_settings.write(f"Substrate layers: {layers}\n")
-        f_settings.write(f"Species: {algorithm.neat.species_controller.species_size}\n")
-        f_settings.write(f"NEAT init. shape {neat_inputs, neat_hidden_layers, neat_outputs}\n")
-        f_settings.write(f"Seed: {pipeline.seed}\n")
-        f_settings.write(f"Problem task: {pipeline.problem.__class__.__name__}\n")
-
-    print("Starting training ...")
-    with open(f"results/{timestamp}_mlp/log.txt", "w") as f_log:
-        with contextlib.redirect_stdout(f_log):
-            # initialize state
-            state = pipeline.setup()
-            # print(state)
-            # run until terminate
-            filename = f"results/{timestamp}_mlp/current_gen.txt"
-            state, best = pipeline.auto_run(state, filename)
-
-    print("Finished training.")
-
-    with open(f"results/{timestamp}_mlp/best.txt", "w") as f_best:
-        with contextlib.redirect_stdout(f_best):
-            print(f"Total time: {time.time() - start_time:.2f} seconds")
-            print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds\n")
-
-
-            start_time_test = time.time()
-            # show result
-            pipeline.show(state, best)
-            print(f"Testing time: {time.time() - start_time_test} seconds\n")
-
-            # visualize the best individual
-            network = algorithm.neat.genome.network_dict(state, *best)
-            print(algorithm.neat.genome.repr(state, *best))
-            algorithm.neat.genome.visualize(network, save_path=f"results/{timestamp}_mlp/imgs/xor_CPPN_network_mlp.svg")
-
-            transformed = algorithm.transform(state, best)
-            seqs, h_nodes, h_conns, u_conns = transformed
-            hyper_network = algorithm.hyper_genome.network_dict(state, h_nodes, h_conns)
-            print(algorithm.hyper_genome.repr(state, h_nodes, h_conns))
-            algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_mlp/imgs/xor_hyperneat_network_mlp.svg")
-
-    
+    # initialize state
+    state = pipeline.setup()
+    # run until terminate
+    state, best = pipeline.auto_run(state)
+    # show result
+    pipeline.show(state, best)
