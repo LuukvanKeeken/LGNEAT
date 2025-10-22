@@ -41,7 +41,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=10,
+                pop_size=100,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=inside_circle_problem,
-        generation_limit=2,
+        generation_limit=10000,
         seed=3
     )
 
