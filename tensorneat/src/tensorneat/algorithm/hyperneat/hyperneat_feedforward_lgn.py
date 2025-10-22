@@ -100,7 +100,10 @@ class HyperNEATFeedForwardLGN(HyperNEAT):
             mask = (post_ids == post)
             post_leos = jnp.where(mask, LEO_values, -jnp.inf)
             top2 = jnp.argsort(post_leos)[-2:]
-            sums = col4[top2] + col5[top2]
+            # sums = col4[top2] + col5[top2]
+            nand_sum = jnp.sum(col4[top2])
+            nor_sum = jnp.sum(col5[top2])
+            sums = jnp.stack([nand_sum, nor_sum])
             argmax_idx = jnp.argmax(sums)
             top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
             return top2_mask & mask, argmax_idx
