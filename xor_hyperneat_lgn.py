@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     neat_inputs = 4
     neat_outputs = 3
-    neat_hidden_layers = (2,)
+    neat_hidden_layers = ()
 
     algorithm=HyperNEATFeedForwardLGN(
             substrate=LGNSubstrateLEO(
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=10000,
+        generation_limit=100000,
         seed=3
     )
 
