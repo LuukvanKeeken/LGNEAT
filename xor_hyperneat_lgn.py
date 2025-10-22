@@ -40,10 +40,10 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=100,
+                pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
-                species_elitism=1,
+                species_elitism=0,
                 genome=DefaultGenomeCPPN(
                     num_inputs=neat_inputs,  # size of query coors
                     num_outputs=neat_outputs,
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=1000000,
+        generation_limit=500000,
         seed=3
     )
 
