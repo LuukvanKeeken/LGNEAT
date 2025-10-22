@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     neat_inputs = 4
     neat_outputs = 3
-    neat_hidden_layers = (2,)
+    neat_hidden_layers = ()
 
     algorithm=HyperNEATFeedForwardLGN(
             substrate=LGNSubstrateLEO(
@@ -43,6 +43,7 @@ if __name__ == "__main__":
                 pop_size=500,
                 species_size=20,
                 survival_threshold=0.01,
+                species_elitism=0,
                 genome=DefaultGenomeCPPN(
                     num_inputs=neat_inputs,  # size of query coors
                     num_outputs=neat_outputs,
@@ -70,6 +71,7 @@ if __name__ == "__main__":
         f_settings.write(f"NEAT init. shape {neat_inputs, neat_hidden_layers, neat_outputs}\n")
         f_settings.write(f"Seed: {pipeline.seed}\n")
         f_settings.write(f"Problem task: {pipeline.problem.__class__.__name__}\n")
+        f_settings.write(f"Elites: {algorithm.neat.species_controller.species_elitism}\n")
 
 
 

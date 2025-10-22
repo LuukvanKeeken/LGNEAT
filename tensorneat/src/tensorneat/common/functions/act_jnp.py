@@ -61,6 +61,18 @@ def gaussian_(z):
     return jnp.exp(-jnp.square(z))
 
 
+def cos_(z):
+    return jnp.cos(z)
+
+
+def square_(z):
+    return jnp.square(z)
+
+
+def abs_root_(z):
+    return jnp.sqrt(jnp.abs(z))
+
+
 # NAND gate operation with z having two elements
 # Should raise some error if z does not have exactly two elements
 def nand_(z):

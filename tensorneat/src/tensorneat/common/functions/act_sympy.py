@@ -106,6 +106,24 @@ class SympyGaussian(sp.Function):
         return sp.exp(-z**2)
 
 
+class SympyCos(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        return sp.cos(z)
+    
+
+class SympySquare(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        return z**2
+    
+
+class SympyAbsRoot(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        return sp.sqrt(sp.Abs(z))
+
+
 class SympyNand(sp.Function):
     @classmethod
     def eval(cls, z):
