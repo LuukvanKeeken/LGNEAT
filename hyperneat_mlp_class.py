@@ -30,7 +30,7 @@ if not os.path.exists(f"results/{timestamp}_mlp/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [7, 10, 10, 1]
+    layers = [7, 10, 10, 2, 1]
 
     neat_inputs = 4
     neat_outputs = 1
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 ),
             ),
             activation=ACT.tanh,
-            output_transform=ACT.sigmoid,
+            output_transform=ACT.identity,
         )
     
     # Check if input coordinates are inside a circle
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=100000,
+        generation_limit=10000,
         seed=3
     )
 

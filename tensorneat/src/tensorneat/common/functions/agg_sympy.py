@@ -47,3 +47,17 @@ class FilterNans(sp.Function):
             return sp.Matrix(filtered)
         else:
             raise ValueError("FilterNans expects exactly two non-NaN values.")
+
+
+class SympyArgmax(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if not z:
+            raise ValueError("Argmax requires at least one input.")
+        max_index = 0
+        max_value = z[0]
+        for i in range(1, len(z)):
+            if z[i] > max_value:
+                max_value = z[i]
+                max_index = i
+        return sp.Integer(max_index)

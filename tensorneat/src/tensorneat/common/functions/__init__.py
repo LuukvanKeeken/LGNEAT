@@ -57,6 +57,7 @@ agg_name2jnp = {
     "maxabs": maxabs_,
     "mean": mean_,
     "filter_nans": filter_nans_,
+    "argmax": argmax_
 }
 
 agg_name2sympy = {
@@ -67,6 +68,7 @@ agg_name2sympy = {
     "maxabs": SympyMaxabs,
     "mean": SympyMean,
     "filter_nans": FilterNans,
+    "argmax": SympyArgmax,
 }
 
 ACT = FunctionManager(act_name2jnp, act_name2sympy)

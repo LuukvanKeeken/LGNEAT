@@ -36,3 +36,6 @@ def filter_nans_(z):
     idxs = jnp.nonzero(mask, size=2, fill_value=0)[0]
     return z[idxs]
 
+
+def argmax_(z):
+    return jnp.asarray(jnp.argmax(z, axis=0), dtype=jnp.float32)
