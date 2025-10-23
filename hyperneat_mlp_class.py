@@ -96,7 +96,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        fitness_target=-0.2,
+        fitness_target=-0.15,
         generation_limit=100000,
         seed=3
     )
@@ -104,6 +104,7 @@ if __name__ == "__main__":
 
     with open(f"results/{timestamp}_mlp/settings.txt", "w") as f_settings:
         f_settings.write(f"Generations: {pipeline.generation_limit}\n")
+        f_settings.write(f"Fitness target: {pipeline.fitness_target}\n")
         f_settings.write(f"Population size: {algorithm.neat.pop_size}\n")
         f_settings.write(f"Substrate layers: {layers}\n")
         f_settings.write(f"Species: {algorithm.neat.species_controller.species_size}\n")
