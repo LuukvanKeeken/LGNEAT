@@ -29,7 +29,8 @@ problem = problem.XOR3d()
 pipeline = Pipeline(
     algorithm,
     problem,
-    generation_limit=200,
+    # generation_limit=200,
+    fitness_target=-0.01,
     seed=42,
 )
 state = pipeline.setup()
