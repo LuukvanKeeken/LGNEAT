@@ -48,4 +48,16 @@ def filter_nans_(z):
 
 # Also check if z is an array of two elements
 def argmax_(z):
-    return jnp.asarray(jnp.argmax(z), dtype=jnp.float32)
+    # If z is an array of two elements, avoid jnp.argmax directly because
+    # NaNs can lead to inconsistent results across devices/compilation modes.
+    # Return 0.0 or 1.0 as float indicating which element is larger. If both
+    # are -inf (i.e., no valid values), return 0.0.
+    z = jnp.asarray(z)
+    if z.size == 1:
+        return jnp.asarray(0.0, dtype=jnp.float32)
+    # consider only first two elements
+    a, b = z[0], z[1]
+    # handle NaNs by treating them as -inf (already ensured by filter_nans)
+    a = jnp.where(jnp.isnan(a), -jnp.inf, a)
+    b = jnp.where(jnp.isnan(b), -jnp.inf, b)
+    return jnp.asarray(jnp.where(a >= b, 0.0, 1.0), dtype=jnp.float32)
