@@ -235,7 +235,7 @@ class Pipeline(StatefulBaseClass):
 
         print(
             f"Generation: {generation}, Cost time: {cost_time * 1000:.2f}ms\n",
-            f"\tfitness: valid cnt: {len(valid_fitnesses)}, max: {max_f:.4f}, min: {min_f:.4f}, mean: {mean_f:.4f}, std: {std_f:.4f}\n",
+            f"\tfitness: valid cnt: {len(valid_fitnesses)}, max: {max_f:.4f}, best: {self.best_fitness:.4f}, min: {min_f:.4f}, mean: {mean_f:.4f}, std: {std_f:.4f}\n",
         )
 
         self.algorithm.show_details(state, fitnesses)

@@ -109,6 +109,7 @@ if __name__ == "__main__":
         f_settings.write(f"NEAT init. shape {neat_inputs, neat_hidden_layers, neat_outputs}\n")
         f_settings.write(f"Seed: {pipeline.seed}\n")
         f_settings.write(f"Problem task: {pipeline.problem.__class__.__name__}\n")
+        f_settings.write(f"Elites: {algorithm.neat.species_controller.species_elitism}\n")
 
     print("Starting training ...")
     with open(f"results/{timestamp}_mlp/log.txt", "w") as f_log:
