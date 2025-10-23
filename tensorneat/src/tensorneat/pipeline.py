@@ -215,8 +215,7 @@ class Pipeline(StatefulBaseClass):
         max_idx = np.argmax(fitnesses)
         if fitnesses[max_idx] > self.best_fitness:
             self.best_fitness = fitnesses[max_idx]
-            # copy best genome to host (avoid referencing device buffers that may change)
-            self.best_genome = jax.device_get((pop[0][max_idx], pop[1][max_idx]))
+            self.best_genome = pop[0][max_idx], pop[1][max_idx]
 
         if self.is_save:
             # save best

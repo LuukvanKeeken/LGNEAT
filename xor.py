@@ -1,7 +1,7 @@
-from tensorneat.pipeline import Pipeline
-from tensorneat import algorithm, genome, problem
-from tensorneat.genome import OriginNode, OriginConn
-from tensorneat.common import ACT
+from tensorneat.src.tensorneat.pipeline import Pipeline
+from tensorneat.src.tensorneat import algorithm, genome, problem
+from tensorneat.src.tensorneat.genome import OriginNode, OriginConn
+from tensorneat.src.tensorneat.common import ACT
 import time
 
 """
@@ -12,7 +12,7 @@ See https://github.com/EMI-Group/tensorneat/issues/11
 start_time = time.time()
 
 algorithm = algorithm.NEAT(
-    pop_size=10000,
+    pop_size=1000,
     species_size=20,
     survival_threshold=0.01,
     genome=genome.DefaultGenome(
