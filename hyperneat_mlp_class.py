@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     neat_inputs = 4
     neat_outputs = 1
-    neat_hidden_layers = ()
+    neat_hidden_layers = (2,)
 
     algorithm=HyperNEATFeedForwardCust(
             substrate=MLPSubstrate(
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=10000,
+        generation_limit=50000,
         seed=3
     )
 
