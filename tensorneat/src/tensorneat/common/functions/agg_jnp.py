@@ -31,10 +31,20 @@ def mean_(z):
 # Return an array containing only the non-NaN values from z.
 # There will always be exactly 2 non-NaN values.
 def filter_nans_(z):
-    
+    # Return the non-NaN values (up to two) in their original order.
+    # If there are fewer than two non-NaNs, pad the result with -inf so
+    # downstream reductions (argmax) don't see NaN and behave consistently
+    # across devices and compilation modes.
     mask = ~jnp.isnan(z)
-    idxs = jnp.nonzero(mask, size=2, fill_value=0)[0]
-    return z[idxs]
+    z_safe = jnp.where(mask, z, -jnp.inf)
+
+    # positions, with NaNs pushed to the end (pos_masked >= len(z) for NaNs)
+    pos = jnp.arange(z.shape[0])
+    pos_masked = jnp.where(mask, pos, z.shape[0])
+
+    # take the first two positions that were non-NaN (original order)
+    top2_pos = jnp.argsort(pos_masked)[:2]
+    return z_safe[top2_pos]
 
 # Also check if z is an array of two elements
 def argmax_(z):
