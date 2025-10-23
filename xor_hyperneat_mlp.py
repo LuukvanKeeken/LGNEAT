@@ -30,7 +30,7 @@ if not os.path.exists(f"results/{timestamp}_mlp/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [4, 100, 100, 1]
+    layers = [4, 10, 10, 1]
 
     neat_inputs = 4
     neat_outputs = 1
@@ -41,7 +41,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=500,
+                pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -58,7 +58,8 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=XOR3d(),
-        generation_limit=10000
+        generation_limit=100000,
+        fitness_target=-0.02,
     )
 
     with open(f"results/{timestamp}_mlp/settings.txt", "w") as f_settings:
