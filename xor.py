@@ -36,7 +36,7 @@ pipeline = Pipeline(
 state = pipeline.setup()
 # run until terminate
 print("Starting pipeline ...")
-state, best = pipeline.auto_run(state)
+state, best = pipeline.auto_run(state, filename="current_gen.txt")
 # show result
 pipeline.show(state, best)
 
@@ -46,7 +46,7 @@ print(algorithm.genome.repr(state, *best))
 algorithm.genome.visualize(network, save_path="./imgs/xor_network.svg")
 
 # transform the best individual to latex formula
-from tensorneat.common.sympy_tools import to_latex_code, to_python_code
+from tensorneat.src.tensorneat.common.sympy_tools import to_latex_code, to_python_code
 
 sympy_res = algorithm.genome.sympy_func(
     state, network, sympy_output_transform=ACT.obtain_sympy(ACT.sigmoid)
