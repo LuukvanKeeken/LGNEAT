@@ -248,9 +248,9 @@ class Pipeline(StatefulBaseClass):
             print(f"Recalculated fitness: {recalculated_fitness}")
             print(f"self.best_fitness: {self.best_fitness}")
             print(f"max_idx: {max_idx}")
-            if round(recalculated_fitness, 4) != round(self.best_fitness, 4):
-                print(f"Recalculated fitness {round(recalculated_fitness, 4)} does not match stored best fitness {round(self.best_fitness, 4)}!")
-                raise ValueError(f"Recalculated fitness {round(recalculated_fitness, 4)} does not match stored best fitness {round(self.best_fitness, 4)}!")
+            if jnp.round(recalculated_fitness, decimals=4) != jnp.round(self.best_fitness, decimals=4):
+                print(f"Recalculated fitness {jnp.round(recalculated_fitness, decimals=4)} does not match stored best fitness {jnp.round(self.best_fitness, decimals=4)}!")
+                raise ValueError(f"Recalculated fitness {jnp.round(recalculated_fitness, decimals=4)} does not match stored best fitness {jnp.round(self.best_fitness, decimals=4)}!")
 
 
         if self.is_save:
