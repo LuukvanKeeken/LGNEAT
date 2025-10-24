@@ -209,6 +209,7 @@ class Pipeline(StatefulBaseClass):
         
         print(f"Again fitnesses:")
         print(f"{jnp.max(fitnesses_previous_pop)} at {jnp.argmax(fitnesses_previous_pop)} ")
+        print(f"fitness at index 414: {fitnesses_previous_pop[414]}")
 
         return state, self.best_genome
 
