@@ -199,6 +199,8 @@ class Pipeline(StatefulBaseClass):
                     fitness=self.best_fitness,
                 )
 
+        self.show(state, self.best_genome)
+
         return state, self.best_genome
 
     def analysis(self, state, pop, fitnesses):
