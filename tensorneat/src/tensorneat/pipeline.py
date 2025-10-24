@@ -246,6 +246,9 @@ class Pipeline(StatefulBaseClass):
                 self.algorithm.transform(state, self.best_genome)
             )
             print(f"Recalculated fitness: {recalculated_fitness}")
+            print(f"self.best_fitness: {self.best_fitness}")
+            if recalculated_fitness != self.best_fitness:
+                raise ValueError("Recalculated fitness does not match stored best fitness!")
 
 
         if self.is_save:
