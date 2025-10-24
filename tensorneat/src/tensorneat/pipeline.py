@@ -199,7 +199,9 @@ class Pipeline(StatefulBaseClass):
                     fitness=self.best_fitness,
                 )
 
-        self.show(state, self.best_genome)
+        best_transformed = self.algorithm.transform(state, self.best_genome)
+        print("Final evaluation on the whole dataset:")
+        print(self.problem.evaluate(state, None, self.algorithm.forward, best_transformed))
 
         return state, self.best_genome
 
