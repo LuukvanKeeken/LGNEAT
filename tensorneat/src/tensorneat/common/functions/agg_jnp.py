@@ -36,19 +36,17 @@ def filter_nans_(z):
     idxs = jnp.nonzero(mask, size=2, fill_value=0)[0]
     return z[idxs]
 
-# Return the maximum value from z in a deterministic way.
-# We replace NaNs with -inf so they don't win, and for two-element
-# inputs prefer the first element in case of ties (stable behavior).
+# Also check if z is an array of two elements
 def argmax_(z):
+    """
+    Return the index (0 or 1, as a float) of the maximum element along the
+    last axis for 2-element inputs. NaNs are treated as -inf so they never win.
+
+    The result is a float (0.0 or 1.0) which matches downstream code that
+    expects numeric labels/activations rather than integer indices.
+    """
     # make NaNs effectively -inf
     z = jnp.where(jnp.isnan(z), -jnp.inf, z)
-    # if z is a 1-D array of two elements, prefer first on tie
-    # handle general arrays by taking elementwise max over axis 0
-    try:
-        # fast path for 1-D / small arrays: use explicit comparison for stability
-        a = z[0]
-        b = z[1]
-        return jnp.where(a >= b, a, b)
-    except Exception:
-        # fallback: use jnp.max which works elementwise and is jittable
-        return jnp.max(z, axis=0, where=~jnp.isnan(z), initial=-jnp.inf)
+    # use jnp.argmax which is jittable and returns the first index on ties
+    idx = jnp.argmax(z, axis=0)
+    return jnp.asarray(idx, dtype=jnp.float32)
