@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
             best_transformed = algorithm.transform(state, best)
             print("Final evaluation on the whole dataset:")
-            even_problem.evaluate(state, None, algorithm.forward, best_transformed)
+            print(even_problem.evaluate(state, None, algorithm.forward, best_transformed))
 
     print("Finished training.")
 
