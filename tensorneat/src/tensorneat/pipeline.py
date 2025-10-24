@@ -199,6 +199,21 @@ class Pipeline(StatefulBaseClass):
                     fitness=self.best_fitness,
                 )
 
+        # Do fitness evaluation of previous_pop
+        previous_pop_transformed = jax.vmap(self.algorithm.transform, in_axes=(None, 0))(
+            state, previous_pop
+        )
+        fitnesses_previous_pop = jax.vmap(self.problem.evaluate, in_axes=(None, 0, None, 0))(
+                state, None, self.algorithm.forward, previous_pop_transformed
+            )
+        
+        print(f"Again fitnesses:")
+        print(f"{jnp.max(fitnesses_previous_pop)} at {jnp.argmax(fitnesses_previous_pop)} ")
+        print(f"fitness at index 414: {fitnesses_previous_pop[414]}")
+        print("all fitness previous pop:")
+        for fit in range(len(fitnesses_previous_pop)):
+            print(f"Genome {fit} fitness: {fitnesses_previous_pop[fit]}")
+
         return state, self.best_genome
 
     def analysis(self, state, pop, fitnesses):
@@ -225,6 +240,17 @@ class Pipeline(StatefulBaseClass):
         if fitnesses[max_idx] > self.best_fitness:
             self.best_fitness = fitnesses[max_idx]
             self.best_genome = pop[0][max_idx], pop[1][max_idx]
+            print("Recalculate fitness of new best genome at this point")
+            recalculated_fitness = self.problem.evaluate(
+                state, None, self.algorithm.forward,
+                self.algorithm.transform(state, self.best_genome)
+            )
+            print(f"Recalculated fitness: {recalculated_fitness}")
+            print(f"self.best_fitness: {self.best_fitness}")
+            print(f"max_idx: {max_idx}")
+            if not jnp.isclose(recalculated_fitness, self.best_fitness, atol=1e-4):
+                raise ValueError(f"Recalculated fitness {recalculated_fitness} does not match stored best fitness {self.best_fitness}!")
+
 
         if self.is_save:
             # save best
