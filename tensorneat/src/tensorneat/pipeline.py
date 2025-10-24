@@ -167,7 +167,7 @@ class Pipeline(StatefulBaseClass):
 
                 if max(fitnesses) >= self.fitness_target:
                     print("Fitness limit reached!")
-
+                    print(f"{jnp.max(fitnesses)} at {jnp.argmax(fitnesses)}")
                     # print best genome
                     best_fitness = self.best_fitness
                     best_genome = self.best_genome
