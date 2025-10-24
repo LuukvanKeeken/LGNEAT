@@ -59,7 +59,7 @@ if __name__ == "__main__":
         algorithm=algorithm,
         problem=XOR3d(),
         generation_limit=100000,
-        fitness_target=-0.2,
+        fitness_target=-0.00001,
     )
 
     with open(f"results/{timestamp}_mlp/settings.txt", "w") as f_settings:
