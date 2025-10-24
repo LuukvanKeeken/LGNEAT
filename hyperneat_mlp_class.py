@@ -123,7 +123,13 @@ if __name__ == "__main__":
             filename = f"results/{timestamp}_mlp/current_gen.txt"
             state, best = pipeline.auto_run(state, filename)
 
+            best_transformed = algorithm.transform(state, best)
+            print("Final evaluation on the whole dataset:")
+            even_problem.evaluate(state, None, algorithm.forward, best_transformed)
+
     print("Finished training.")
+
+
 
     with open(f"results/{timestamp}_mlp/best.txt", "w") as f_best:
         with contextlib.redirect_stdout(f_best):
