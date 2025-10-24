@@ -251,7 +251,7 @@ class Pipeline(StatefulBaseClass):
             # Ensure the stored best_genome (host numpy arrays) are converted
             # back to device arrays before passing into jitted/traceable code.
             # Using jax.tree_map(jax.device_put, ...) handles arbitrary PyTrees.
-            best_genome_device = jax.tree_map(jax.device_put, self.best_genome)
+            best_genome_device = jax.tree_util.tree_map(jax.device_put, self.best_genome)
             transformed_best = self.algorithm.transform(state, best_genome_device)
             recalculated_fitness = self.problem.evaluate(
                 state, None, self.algorithm.forward, transformed_best
