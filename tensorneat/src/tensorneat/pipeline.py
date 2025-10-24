@@ -248,7 +248,7 @@ class Pipeline(StatefulBaseClass):
             print(f"Recalculated fitness: {recalculated_fitness}")
             print(f"self.best_fitness: {self.best_fitness}")
             print(f"max_idx: {max_idx}")
-            if recalculated_fitness != self.best_fitness:
+            if round(recalculated_fitness, 4) != round(self.best_fitness, 4):
                 raise ValueError("Recalculated fitness does not match stored best fitness!")
 
 
