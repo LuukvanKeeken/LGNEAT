@@ -167,6 +167,13 @@ class Pipeline(StatefulBaseClass):
 
                 if max(fitnesses) >= self.fitness_target:
                     print("Fitness limit reached!")
+
+                    # print best genome
+                    best_fitness = self.best_fitness
+                    best_genome = self.best_genome
+                    print(f"Best genome fitness: {best_fitness}")
+                    print(f"Best genome: {best_genome}")
+
                     for fit in range(len(fitnesses)):
                         print(f"Genome {fit} fitness: {fitnesses[fit]}")
                     break
