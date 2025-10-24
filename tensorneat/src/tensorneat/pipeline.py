@@ -239,7 +239,7 @@ class Pipeline(StatefulBaseClass):
         max_idx = np.argmax(fitnesses)
         if fitnesses[max_idx] > self.best_fitness:
             self.best_fitness = fitnesses[max_idx]
-            self.best_genome = pop[0][max_idx], pop[1][max_idx]
+            self.best_genome = (jax.device_get(pop[0][max_idx]), jax.device_get(pop[1][max_idx]))
             print("Recalculate fitness of new best genome at this point")
             recalculated_fitness = self.problem.evaluate(
                 state, None, self.algorithm.forward,
