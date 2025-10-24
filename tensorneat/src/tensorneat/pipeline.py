@@ -199,9 +199,16 @@ class Pipeline(StatefulBaseClass):
                     fitness=self.best_fitness,
                 )
 
-        best_transformed = self.algorithm.transform(state, self.best_genome)
-        print("Final evaluation on the whole dataset:")
-        print(self.problem.evaluate(state, None, self.algorithm.forward, best_transformed))
+        # Do fitness evaluation of previous_pop
+        previous_pop_transformed = jax.vmap(self.algorithm.transform, in_axes=(None, 0))(
+            state, previous_pop
+        )
+        fitnesses_previous_pop = jax.vmap(self.problem.evaluate, in_axes=(None, 0, None, 0))(
+                state, None, self.algorithm.forward, previous_pop_transformed
+            )
+        
+        print(f"Again fitnesses:")
+        print(f"{jnp.max(fitnesses_previous_pop)} at {jnp.argmax(fitnesses_previous_pop)} ")
 
         return state, self.best_genome
 
