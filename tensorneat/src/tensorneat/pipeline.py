@@ -248,9 +248,13 @@ class Pipeline(StatefulBaseClass):
             # store best_fitness as a Python float (host) for stable comparisons
             self.best_fitness = float(jax.device_get(fitnesses[max_idx]))
             print("Recalculate fitness of new best genome at this point")
+            # Ensure the stored best_genome (host numpy arrays) are converted
+            # back to device arrays before passing into jitted/traceable code.
+            # Using jax.tree_map(jax.device_put, ...) handles arbitrary PyTrees.
+            best_genome_device = jax.tree_map(jax.device_put, self.best_genome)
+            transformed_best = self.algorithm.transform(state, best_genome_device)
             recalculated_fitness = self.problem.evaluate(
-                state, None, self.algorithm.forward,
-                self.algorithm.transform(state, self.best_genome)
+                state, None, self.algorithm.forward, transformed_best
             )
             print(f"Recalculated fitness: {recalculated_fitness}")
             print(f"self.best_fitness: {self.best_fitness}")
