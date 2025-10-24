@@ -167,6 +167,8 @@ class Pipeline(StatefulBaseClass):
 
                 if max(fitnesses) >= self.fitness_target:
                     print("Fitness limit reached!")
+                    for fit in range(len(fitnesses)):
+                        print(f"Genome {fit} fitness: {fitnesses[fit]}")
                     break
 
                 # overwrite the previous progress line instead of appending
