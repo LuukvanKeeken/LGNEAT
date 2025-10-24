@@ -240,6 +240,13 @@ class Pipeline(StatefulBaseClass):
         if fitnesses[max_idx] > self.best_fitness:
             self.best_fitness = fitnesses[max_idx]
             self.best_genome = pop[0][max_idx], pop[1][max_idx]
+            print("Recalculate fitness of new best genome at this point")
+            recalculated_fitness = self.problem.evaluate(
+                state, None, self.algorithm.forward,
+                self.algorithm.transform(state, self.best_genome)
+            )
+            print(f"Recalculated fitness: {recalculated_fitness}")
+
 
         if self.is_save:
             # save best
