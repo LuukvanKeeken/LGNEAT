@@ -98,7 +98,7 @@ if __name__ == "__main__":
         problem=even_problem,
         fitness_target=-0.26,
         generation_limit=10000,
-        seed=3
+        seed=4
     )
 
 
