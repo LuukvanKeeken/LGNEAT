@@ -114,8 +114,8 @@ class HyperNEATNode(BaseNode):
     def forward(self, state, attrs, inputs, is_output_node=False):
         return jax.lax.cond(
             is_output_node,
-            # lambda: AGG.argmax(AGG.filter_nans(inputs)),  # output node does not need activation
-            lambda: self.aggregation(inputs),  # output node does not need activation
+            lambda: AGG.argmax(AGG.filter_nans(inputs)),  # output node does not need activation
+            # lambda: self.aggregation(inputs),  # output node does not need activation
             lambda: self.activation(self.aggregation(inputs)),
         )
 
