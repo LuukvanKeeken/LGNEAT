@@ -93,13 +93,13 @@ if __name__ == "__main__":
     #     step_size = jnp.ones(6)
     # )
 
-    pipeline = Pipeline(
-        algorithm=algorithm,
-        problem=inside_circle_problem,
-        fitness_target=-0.17,
-        generation_limit=20000,
-        seed=4
-    )
+    # pipeline = Pipeline(
+    #     algorithm=algorithm,
+    #     problem=even_problem,
+    #     fitness_target=-0.17,
+    #     generation_limit=20000,
+    #     seed=4
+    # )
 
 
     with open(f"results/{timestamp}_mlp/settings.txt", "w") as f_settings:
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
             best_transformed = algorithm.transform(state, best)
             print("Final evaluation on the whole dataset:")
-            print(even_problem.evaluate(state, None, algorithm.forward, best_transformed))
+            print(inside_circle_problem.evaluate(state, None, algorithm.forward, best_transformed))
 
     print("Finished training.")
 
