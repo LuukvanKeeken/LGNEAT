@@ -24,12 +24,8 @@ class FuncFit(BaseProblem):
             state, params, self.inputs
         )
 
-        predict_argmax = jnp.argmax(predict, axis=1)
-        target_argmax = jnp.argmax(self.targets, axis=1)
-
         if self.error_method == "mse":
-            # loss = jnp.mean((predict - self.targets) ** 2)
-            loss = jnp.mean(predict_argmax != target_argmax)
+            loss = jnp.mean((predict - self.targets) ** 2)
 
         elif self.error_method == "rmse":
             loss = jnp.sqrt(jnp.mean((predict - self.targets) ** 2))
