@@ -74,7 +74,8 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=inside_circle_problem,
-        generation_limit=10000,
+        generation_limit=100000,
+        fitness_target=-0.1,
         seed=3
     )
 
