@@ -47,7 +47,7 @@ if __name__ == "__main__":
         ),
         problem=even_problem,
         generation_limit=20000,
-        fitness_target=0.1,
+        fitness_target=-0.001,
         seed=42,
     )
 
