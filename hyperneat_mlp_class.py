@@ -30,7 +30,7 @@ if not os.path.exists(f"results/{timestamp}_mlp/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [7, 10, 10, 1]
+    layers = [7, 10, 10, 2]
 
     neat_inputs = 4
     neat_outputs = 1
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # of ones, and return 1 if that number is even, otherwise 0
     def even_ones(inputs):
         count_ones = jnp.sum(inputs)
-        return jnp.where(count_ones % 2 == 0, jnp.array([1]), jnp.array([0]))
+        return jnp.where(count_ones % 2 == 0, jnp.array([1, 0]), jnp.array([0, 1]))
 
 
     even_problem = CustomFuncFit(
