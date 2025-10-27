@@ -75,7 +75,7 @@ if __name__ == "__main__":
         algorithm=algorithm,
         problem=inside_circle_problem,
         generation_limit=100000,
-        fitness_target=-0.1,
+        fitness_target=-0.01,
         seed=3
     )
 
