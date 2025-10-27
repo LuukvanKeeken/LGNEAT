@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 ),
             ),
             activation=ACT.tanh,
-            output_transform=ACT.identity,
+            output_transform=ACT.sigmoid,
         )
     
     # Check if input coordinates are inside a circle
