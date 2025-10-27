@@ -36,7 +36,7 @@ if __name__ == "__main__":
             survival_threshold=0.01,
             genome=DefaultGenome(
                 num_inputs=6,
-                num_outputs=1,
+                num_outputs=2,
                 init_hidden_layers=(),
                 node_gene=BiasNode(
                     activation_options=[ACT.identity, ACT.inv, ACT.square],
