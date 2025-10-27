@@ -41,7 +41,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 ),
             ),
             activation=ACT.tanh,
-            output_transform=ACT.tanh,
+            output_transform=ACT.identity,
         )
     
     # Check if input coordinates are inside a circle
@@ -96,8 +96,8 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        fitness_target=-0.3,
-        generation_limit=100000,
+        fitness_target=-0.1,
+        generation_limit=20000,
         seed=4
     )
 
