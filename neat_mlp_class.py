@@ -35,7 +35,7 @@ if __name__ == "__main__":
             species_size=20,
             survival_threshold=0.01,
             genome=DefaultGenome(
-                num_inputs=2,
+                num_inputs=6,
                 num_outputs=1,
                 init_hidden_layers=(),
                 node_gene=BiasNode(
