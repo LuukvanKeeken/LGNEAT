@@ -57,45 +57,45 @@ if __name__ == "__main__":
     
     # Check if input coordinates are inside a circle
     # # Return [1, 0] if inside, else [0, 1]
-    # def inside_circle(inputs, radius=0.5):
-    #     x, y = inputs
-    #     res = jnp.square(x) + jnp.square(y)
+    def inside_circle(inputs, radius=0.5):
+        x, y = inputs
+        res = jnp.square(x) + jnp.square(y)
         
-    #     return jnp.where(res <= radius**2, jnp.array([1]), jnp.array([0]))
+        return jnp.where(res <= radius**2, jnp.array([1]), jnp.array([0]))
     
-    # inside_circle_problem = CustomFuncFit(
-    #     func = inside_circle,
-    #     low_bounds = [-1, -1],
-    #     upper_bounds = [1, 1],
-    #     method = "sample",
-    #     num_samples = 20
-    # )
-
-    # pipeline = Pipeline(
-    #     algorithm=algorithm,
-    #     problem=inside_circle_problem,
-    #     generation_limit=10000,
-    #     seed=3
-    # )
-
-    # Inputs is a vector of ones and zeros. Count the number
-    # of ones, and return 1 if that number is even, otherwise 0
-    def even_ones(inputs):
-        count_ones = jnp.sum(inputs)
-        return jnp.where(count_ones % 2 == 0, jnp.array([1]), jnp.array([0]))
-
-
-    even_problem = CustomFuncFit(
-        func = even_ones,
-        low_bounds = jnp.zeros(6),
-        upper_bounds = jnp.ones(6)*1.1,
-        method = "grid",
-        step_size = jnp.ones(6)
+    inside_circle_problem = CustomFuncFit(
+        func = inside_circle,
+        low_bounds = [-1, -1],
+        upper_bounds = [1, 1],
+        method = "sample",
+        num_samples = 20
     )
 
     pipeline = Pipeline(
         algorithm=algorithm,
-        problem=even_problem,
+        problem=inside_circle_problem,
+        generation_limit=10000,
+        seed=3
+    )
+
+    # Inputs is a vector of ones and zeros. Count the number
+    # of ones, and return 1 if that number is even, otherwise 0
+    # def even_ones(inputs):
+    #     count_ones = jnp.sum(inputs)
+    #     return jnp.where(count_ones % 2 == 0, jnp.array([1]), jnp.array([0]))
+
+
+    # even_problem = CustomFuncFit(
+    #     func = even_ones,
+    #     low_bounds = jnp.zeros(6),
+    #     upper_bounds = jnp.ones(6)*1.1,
+    #     method = "grid",
+    #     step_size = jnp.ones(6)
+    # )
+
+    pipeline = Pipeline(
+        algorithm=algorithm,
+        problem=inside_circle_problem,
         fitness_target=-0.17,
         generation_limit=20000,
         seed=4
