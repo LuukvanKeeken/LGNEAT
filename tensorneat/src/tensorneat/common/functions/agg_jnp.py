@@ -43,4 +43,4 @@ def argmax_(z):
 
 def new_aggregation_func_(z):
     z = jnp.where(jnp.isnan(z), -jnp.inf, z)
-    return jnp.argmax(z) 
+    return jnp.asarray(jnp.argmax(z), dtype=jnp.float32)
