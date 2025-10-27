@@ -58,6 +58,7 @@ agg_name2jnp = {
     "mean": mean_,
     "filter_nans": filter_nans_,
     "argmax": argmax_,
+    "argmax_filtered": argmax_filtered_,
     "new_aggregation_func": new_aggregation_func_,
 }
 
