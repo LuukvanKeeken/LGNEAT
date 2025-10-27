@@ -57,7 +57,8 @@ agg_name2jnp = {
     "maxabs": maxabs_,
     "mean": mean_,
     "filter_nans": filter_nans_,
-    "argmax": argmax_
+    "argmax": argmax_,
+    "new_aggregation_func": new_aggregation_func_,
 }
 
 agg_name2sympy = {

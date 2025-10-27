@@ -38,15 +38,9 @@ def filter_nans_(z):
 
 # Also check if z is an array of two elements
 def argmax_(z):
-    """
-    Return the index (0 or 1, as a float) of the maximum element along the
-    last axis for 2-element inputs. NaNs are treated as -inf so they never win.
+    return jnp.asarray(jnp.argmax(z), dtype=jnp.float32)
 
-    The result is a float (0.0 or 1.0) which matches downstream code that
-    expects numeric labels/activations rather than integer indices.
-    """
-    # make NaNs effectively -inf
+
+def new_aggregation_func_(z):
     z = jnp.where(jnp.isnan(z), -jnp.inf, z)
-    # use jnp.argmax which is jittable and returns the first index on ties
-    idx = jnp.argmax(z, axis=0)
-    return jnp.asarray(idx, dtype=jnp.float32)
+    return jnp.argmax(z) 
