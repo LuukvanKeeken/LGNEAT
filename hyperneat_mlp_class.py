@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 ),
             ),
             activation=ACT.tanh,
-            output_transform=ACT.sigmoid,
+            output_transform=ACT.identity,
         )
     
     # # Check if input coordinates are inside a circle
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         algorithm=algorithm,
         problem=even_problem,
         fitness_target=-0.1,
-        generation_limit=10000,
+        generation_limit=100000,
         seed=4
     )
 
