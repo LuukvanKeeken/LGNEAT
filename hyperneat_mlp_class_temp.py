@@ -34,14 +34,14 @@ if __name__ == "__main__":
 
     neat_inputs = 4
     neat_outputs = 1
-    neat_hidden_layers = ()
+    neat_hidden_layers = (2,)
 
     algorithm=HyperNEATFeedForwardCust(
             substrate=MLPSubstrate(
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 genome=DefaultGenome(
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         )
     
     # Check if input coordinates are inside a circle
-    # Return [1, 0] if inside, else [0, 1]
+    # # Return [1, 0] if inside, else [0, 1]
     def inside_circle(inputs, radius=0.5):
         x, y = inputs
         res = jnp.square(x) + jnp.square(y)
@@ -78,14 +78,40 @@ if __name__ == "__main__":
         seed=3
     )
 
+    # Inputs is a vector of ones and zeros. Count the number
+    # of ones, and return 1 if that number is even, otherwise 0
+    # def even_ones(inputs):
+    #     count_ones = jnp.sum(inputs)
+    #     return jnp.where(count_ones % 2 == 0, jnp.array([1]), jnp.array([0]))
+
+
+    # even_problem = CustomFuncFit(
+    #     func = even_ones,
+    #     low_bounds = jnp.zeros(6),
+    #     upper_bounds = jnp.ones(6)*1.1,
+    #     method = "grid",
+    #     step_size = jnp.ones(6)
+    # )
+
+    # pipeline = Pipeline(
+    #     algorithm=algorithm,
+    #     problem=even_problem,
+    #     fitness_target=-0.17,
+    #     generation_limit=20000,
+    #     seed=4
+    # )
+
+
     with open(f"results/{timestamp}_mlp/settings.txt", "w") as f_settings:
         f_settings.write(f"Generations: {pipeline.generation_limit}\n")
+        f_settings.write(f"Fitness target: {pipeline.fitness_target}\n")
         f_settings.write(f"Population size: {algorithm.neat.pop_size}\n")
         f_settings.write(f"Substrate layers: {layers}\n")
         f_settings.write(f"Species: {algorithm.neat.species_controller.species_size}\n")
         f_settings.write(f"NEAT init. shape {neat_inputs, neat_hidden_layers, neat_outputs}\n")
         f_settings.write(f"Seed: {pipeline.seed}\n")
         f_settings.write(f"Problem task: {pipeline.problem.__class__.__name__}\n")
+        f_settings.write(f"Elites: {algorithm.neat.species_controller.species_elitism}\n")
 
     print("Starting training ...")
     with open(f"results/{timestamp}_mlp/log.txt", "w") as f_log:
@@ -97,7 +123,13 @@ if __name__ == "__main__":
             filename = f"results/{timestamp}_mlp/current_gen.txt"
             state, best = pipeline.auto_run(state, filename)
 
+            best_transformed = algorithm.transform(state, best)
+            print("Final evaluation on the whole dataset:")
+            print(inside_circle_problem.evaluate(state, None, algorithm.forward, best_transformed))
+
     print("Finished training.")
+
+
 
     with open(f"results/{timestamp}_mlp/best.txt", "w") as f_best:
         with contextlib.redirect_stdout(f_best):
