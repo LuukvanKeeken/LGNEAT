@@ -9,10 +9,10 @@ from tensorneat.src.tensorneat.common import State
 class FuncFit(BaseProblem):
     jitable = True
 
-    def __init__(self, error_method: str = "mse"):
+    def __init__(self, error_method: str = "categorical_crossentropy"):
         super().__init__()
 
-        assert error_method in {"mse", "rmse", "mae", "mape"}
+        assert error_method in {"mse", "rmse", "mae", "mape", "categorical_crossentropy"}
         self.error_method = error_method
 
     def setup(self, state: State = State()):
@@ -41,6 +41,11 @@ class FuncFit(BaseProblem):
         elif self.error_method == "mape":
             loss = jnp.mean(jnp.abs((predict - self.targets) / self.targets))
 
+        elif self.error_method == "categorical_crossentropy":
+            loss = -jnp.mean(
+                jnp.sum(self.targets * jnp.log(predict_prob + 1e-10), axis=1)
+            )
+
         else:
             raise NotImplementedError
 
@@ -53,11 +58,15 @@ class FuncFit(BaseProblem):
         inputs, target, predict = jax.device_get([self.inputs, self.targets, predict])
         fitness = self.evaluate(state, randkey, act_func, params)
 
+        temp = 0.01
+        predict_exp = jnp.exp(predict / temp)
+        predict_prob = predict_exp / jnp.sum(predict_exp, axis=1, keepdims=True)
+
         loss = -fitness
 
         msg = ""
         for i in range(inputs.shape[0]):
-            msg += f"input: {inputs[i]}, target: {target[i]}, predict: {predict[i]}\n"
+            msg += f"input: {inputs[i]}, target: {target[i]}, predict: {predict[i]}, prob: {predict_prob[i]}\n"
         msg += f"loss: {loss}\n"
         print(msg)
 
