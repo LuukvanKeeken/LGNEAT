@@ -97,8 +97,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        fitness_target=-0.01,
-        generation_limit=2000,
+        generation_limit=100000,
         seed=3
     )
 
