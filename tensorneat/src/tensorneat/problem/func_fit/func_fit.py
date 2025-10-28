@@ -51,13 +51,28 @@ class FuncFit(BaseProblem):
             raise NotImplementedError
 
         return -loss
+    
+    def evaluate_threshold(self, state, randkey, act_func, params, threshold=0.5):
+        predict = vmap(act_func, in_axes=(None, None, 0))(
+            state, params, self.inputs
+        )
+        predict = (predict >= threshold).astype(jnp.float32)
+
+        accuracy = jnp.mean(predict == self.targets)
+        return accuracy
+        
 
     def show(self, state, randkey, act_func, params, *args, **kwargs):
         predict = vmap(act_func, in_axes=(None, None, 0))(
             state, params, self.inputs
         )
         inputs, target, predict = jax.device_get([self.inputs, self.targets, predict])
+
+        # Binarize predictions
+        predict = (predict >= 0.5).astype(jnp.float32)
+
         fitness = self.evaluate(state, randkey, act_func, params)
+        accuracy = self.evaluate_threshold(state, randkey, act_func, params)
 
         loss = -fitness
 
