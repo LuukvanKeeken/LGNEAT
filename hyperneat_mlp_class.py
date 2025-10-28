@@ -44,6 +44,7 @@ if __name__ == "__main__":
                 pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
+                species_elitism=0,
                 genome=DefaultGenome(
                     num_inputs=neat_inputs,  # size of query coors
                     num_outputs=neat_outputs,
