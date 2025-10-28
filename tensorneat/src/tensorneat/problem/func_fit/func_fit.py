@@ -51,7 +51,7 @@ class FuncFit(BaseProblem):
         elif self.error_method == "cce":
             epsilon = 1e-7  # small constant to avoid log(0)
             loss = -jnp.mean(jnp.sum(self.targets * jnp.log(predict + epsilon), axis=-1))
-            
+
         else:
             raise NotImplementedError
 
@@ -74,7 +74,7 @@ class FuncFit(BaseProblem):
         inputs, target, predict = jax.device_get([self.inputs, self.targets, predict])
 
         # Binarize predictions
-        predict = (predict >= 0.5).astype(jnp.float32)
+        predict_bin = (predict >= 0.5).astype(jnp.float32)
 
         fitness = self.evaluate(state, randkey, act_func, params)
         accuracy = self.evaluate_threshold(state, randkey, act_func, params)
@@ -83,7 +83,7 @@ class FuncFit(BaseProblem):
 
         msg = ""
         for i in range(inputs.shape[0]):
-            msg += f"input: {inputs[i]}, target: {target[i]}, predict: {predict[i]}\n"
+            msg += f"input: {inputs[i]}, target: {target[i]}, predict: {predict[i]} {predict_bin[i]}\n"
         msg += f"loss: {loss}\n"
         msg += f"accuracy: {accuracy}\n"
         print(msg)
