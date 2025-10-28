@@ -9,10 +9,10 @@ from tensorneat.src.tensorneat.common import State
 class FuncFit(BaseProblem):
     jitable = True
 
-    def __init__(self, error_method: str = "binary_cross_entropy"):
+    def __init__(self, error_method: str = "cce"):
         super().__init__()
 
-        assert error_method in {"mse", "rmse", "mae", "mape", "binary_cross_entropy"}
+        assert error_method in {"mse", "rmse", "mae", "mape", "bce", "cce"}
         self.error_method = error_method
 
     def setup(self, state: State = State()):
@@ -41,12 +41,17 @@ class FuncFit(BaseProblem):
         elif self.error_method == "mape":
             loss = jnp.mean(jnp.abs((predict - self.targets) / self.targets))
 
-        elif self.error_method == "binary_cross_entropy":
+        elif self.error_method == "bce":
             epsilon = 1e-7  # small constant to avoid log(0)
             loss = -jnp.mean(
                 self.targets * jnp.log(predict + epsilon)
                 + (1 - self.targets) * jnp.log(1 - predict + epsilon)
             )
+
+        elif self.error_method == "cce":
+            epsilon = 1e-7  # small constant to avoid log(0)
+            loss = -jnp.mean(jnp.sum(self.targets * jnp.log(predict + epsilon), axis=-1))
+            
         else:
             raise NotImplementedError
 

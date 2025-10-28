@@ -55,8 +55,8 @@ if __name__ == "__main__":
             output_transform=ACT.identity,
         )
     
-    # # Check if input coordinates are inside a circle
-    # # # Return [1, 0] if inside, else [0, 1]
+    # Check if input coordinates are inside a circle
+    # # Return [1, 0] if inside, else [0, 1]
     # def inside_circle(inputs, radius=0.5):
     #     x, y = inputs
     #     res = jnp.square(x) + jnp.square(y)
@@ -74,8 +74,7 @@ if __name__ == "__main__":
     # pipeline = Pipeline(
     #     algorithm=algorithm,
     #     problem=inside_circle_problem,
-    #     generation_limit=100000,
-    #     fitness_target=-0.01,
+    #     generation_limit=10000,
     #     seed=3
     # )
 
@@ -98,8 +97,8 @@ if __name__ == "__main__":
         algorithm=algorithm,
         problem=even_problem,
         fitness_target=-0.01,
-        generation_limit=10000,
-        seed=3
+        generation_limit=100000,
+        seed=4
     )
 
 
