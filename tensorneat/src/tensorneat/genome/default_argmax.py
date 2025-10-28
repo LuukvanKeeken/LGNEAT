@@ -121,32 +121,15 @@ class DefaultGenomeArgmax(DefaultGenome):
                     state, hit_attrs, values
                 )
 
-                # # Extract just the non-nan values, and return the index of the max
-                # # non_nan_ins = ins[~jnp.isnan(ins)]
-                # mask = ~jnp.isnan(ins)
-                # idxs = jnp.nonzero(mask, size=2, fill_value=0)[0]  # size=2 if you expect 2 non-NaNs
-                # non_nan_ins = ins[idxs]
+                # Extract just the non-nan values, and return the index of the max
+                # non_nan_ins = ins[~jnp.isnan(ins)]
+                mask = ~jnp.isnan(ins)
+                idxs = jnp.nonzero(mask, size=2, fill_value=0)[0]  # size=2 if you expect 2 non-NaNs
+                non_nan_ins = ins[idxs]
 
-                # new_values = values.at[i].set(jnp.argmax(non_nan_ins))
+                new_values = values.at[i].set(jnp.argmax(non_nan_ins))
 
-                # return new_values
-
-
-                # calculate nodes
-                z = self.node_gene.forward(
-                    state,
-                    nodes_attrs[i],
-                    ins,
-                    is_output_node=jnp.isin(
-                        nodes[i, 0], self.output_idx
-                    ),  # nodes[0] -> the key of nodes
-                )
-
-                # set new value
-                new_values = values.at[i].set(z)
                 return new_values
-
-
 
 
             def otherwise():
