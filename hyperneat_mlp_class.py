@@ -98,8 +98,8 @@ if __name__ == "__main__":
         algorithm=algorithm,
         problem=even_problem,
         fitness_target=-0.01,
-        generation_limit=10000,
-        seed=4
+        generation_limit=3000,
+        seed=5
     )
 
 
