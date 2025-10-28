@@ -80,6 +80,7 @@ class FuncFit(BaseProblem):
         for i in range(inputs.shape[0]):
             msg += f"input: {inputs[i]}, target: {target[i]}, predict: {predict[i]}\n"
         msg += f"loss: {loss}\n"
+        msg += f"accuracy: {accuracy}\n"
         print(msg)
 
     @property
