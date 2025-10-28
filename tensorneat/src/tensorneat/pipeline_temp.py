@@ -167,15 +167,6 @@ class Pipeline(StatefulBaseClass):
 
                 if max(fitnesses) >= self.fitness_target:
                     print("Fitness limit reached!")
-                    print(f"{jnp.max(fitnesses)} at {jnp.argmax(fitnesses)}")
-                    # print best genome
-                    best_fitness = self.best_fitness
-                    best_genome = self.best_genome
-                    print(f"Best genome fitness: {best_fitness}")
-                    print(f"Best genome: {best_genome}")
-
-                    for fit in range(len(fitnesses)):
-                        print(f"Genome {fit} fitness: {fitnesses[fit]}")
                     break
 
                 # overwrite the previous progress line instead of appending
@@ -198,8 +189,6 @@ class Pipeline(StatefulBaseClass):
                     conns=best_genome[1],
                     fitness=self.best_fitness,
                 )
-
-        self.show(state, self.best_genome)
 
         return state, self.best_genome
 
@@ -246,7 +235,7 @@ class Pipeline(StatefulBaseClass):
 
         print(
             f"Generation: {generation}, Cost time: {cost_time * 1000:.2f}ms\n",
-            f"\tfitness: valid cnt: {len(valid_fitnesses)}, max: {max_f:.4f}, best: {self.best_fitness:.4f}, min: {min_f:.4f}, mean: {mean_f:.4f}, std: {std_f:.4f}\n",
+            f"\tfitness: valid cnt: {len(valid_fitnesses)}, max: {max_f:.4f}, min: {min_f:.4f}, mean: {mean_f:.4f}, std: {std_f:.4f}\n",
         )
 
         self.algorithm.show_details(state, fitnesses)
