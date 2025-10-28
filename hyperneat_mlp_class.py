@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     neat_inputs = 4
     neat_outputs = 1
-    neat_hidden_layers = (2,)
+    neat_hidden_layers = ()
 
     algorithm=HyperNEATFeedForwardCust(
             substrate=MLPSubstrate(
