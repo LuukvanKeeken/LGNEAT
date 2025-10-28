@@ -21,7 +21,7 @@ from tensorneat.src.tensorneat.common import (
 )
 
 
-class DefaultGenomeArgmax(BaseGenome):
+class DefaultGenomeSoftmax(BaseGenome):
     """Default genome class, with the same behavior as the NEAT-Python"""
 
     network_type = "feedforward"
