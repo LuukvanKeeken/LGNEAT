@@ -83,7 +83,9 @@ class DefaultGenomeArgmax(DefaultGenome):
             def input_node():
                 return values
 
-            def otherwise():
+
+            def hidden_node():
+
                 # calculate connections
                 conn_indices = u_conns[:, i]
                 hit_attrs = attach_with_inf(
@@ -106,6 +108,35 @@ class DefaultGenomeArgmax(DefaultGenome):
                 # set new value
                 new_values = values.at[i].set(z)
                 return new_values
+                
+
+            def output_node():
+
+                # calculate connections
+                conn_indices = u_conns[:, i]
+                hit_attrs = attach_with_inf(
+                    conns_attrs, conn_indices
+                )  # fetch conn attrs
+                ins = vmap(self.conn_gene.forward, in_axes=(None, 0, 0))(
+                    state, hit_attrs, values
+                )
+
+                # Extract just the non-nan values, and return the index of the max
+                # non_nan_ins = ins[~jnp.isnan(ins)]
+                mask = ~jnp.isnan(ins)
+                idxs = jnp.nonzero(mask, size=2, fill_value=0)[0]  # size=2 if you expect 2 non-NaNs
+                non_nan_ins = ins[idxs]
+
+                new_values = values.at[i].set(jnp.argmax(non_nan_ins))
+
+                return new_values
+
+
+            def otherwise():
+                
+                return jax.lax.cond(jnp.isin(i, self.output_idx), output_node, hidden_node)
+
+                
 
             values = jax.lax.cond(jnp.isin(i, self.input_idx), input_node, otherwise)
 
