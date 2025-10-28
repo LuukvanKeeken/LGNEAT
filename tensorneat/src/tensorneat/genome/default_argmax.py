@@ -168,7 +168,7 @@ class DefaultGenomeArgmax(DefaultGenome):
         else:
             output_vals = self.output_transform(output_vals)
 
-        return jnp.argmax(output_vals)
+        return output_vals
 
 
         if self.output_transform is None:
