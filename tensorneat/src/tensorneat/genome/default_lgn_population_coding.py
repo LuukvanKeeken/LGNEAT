@@ -126,7 +126,7 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
 
 
         # Apply softmax to output_vals, regardless of output_transform
-        exp_vals = jnp.exp(output_vals/5.0)
+        exp_vals = jnp.exp(output_vals/0.5)
         output_vals = exp_vals / jnp.sum(exp_vals)
 
         return output_vals
