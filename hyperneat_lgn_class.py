@@ -29,10 +29,10 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [6, 20, 20, 20]
+    layers = [6, 5, 5, 10]
 
     neat_inputs = 4
-    neat_outputs = 3
+    neat_outputs = 5
     neat_hidden_layers = (4,)
 
     algorithm=HyperNEATFeedForwardLGNClass(
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 species_elitism=1,
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=10000,
+        generation_limit=2,
         seed=3
     )
 

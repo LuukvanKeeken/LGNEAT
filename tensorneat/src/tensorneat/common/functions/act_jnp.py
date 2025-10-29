@@ -87,3 +87,19 @@ def nor_(z):
     if z.shape[0] != 2:
         raise ValueError("Input must have exactly two elements")
     return 1 - jnp.maximum(z[0], z[1])
+
+
+# AND gate operation with z having two elements
+# Should raise some error if z does not have exactly two elements
+def and_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return jnp.prod(z)
+
+
+# OR gate operation with z having two elements
+# Should raise some error if z does not have exactly two elements
+def or_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return jnp.maximum(z[0], z[1])

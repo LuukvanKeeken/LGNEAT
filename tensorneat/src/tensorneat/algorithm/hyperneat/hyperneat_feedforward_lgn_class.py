@@ -72,23 +72,6 @@ class HyperNEATFeedForwardLGNClass(HyperNEAT):
 
         return self.hyper_genome.transform(state, h_nodes, h_conns)    
 
-
-        # transformed = self.neat.transform(state, individual)
-        # query_res = vmap(self.neat.forward, in_axes=(None, None, 0))(
-        #     state, transformed, self.substrate.query_coors
-        # )
-
-
-        # h_nodes, h_conns = self.substrate.make_nodes(
-        #     query_res
-        # ), self.substrate.make_conns(query_res)
-
-        # h_conns = self.keep_top2_per_postsynaptic(h_conns, h_nodes)
-
-        # h_nodes, h_conns = jax.device_put([h_nodes, h_conns])
-
-        # return self.hyper_genome.transform(state, h_nodes, h_conns)
-
     
     
     def keep_top2_per_postsynaptic(self, h_conns, h_nodes):
@@ -96,15 +79,18 @@ class HyperNEATFeedForwardLGNClass(HyperNEAT):
         LEO_values = h_conns[:, 3]
         col4 = h_conns[:, 4]
         col5 = h_conns[:, 5]
+        col6 = h_conns[:, 6]
+        col7 = h_conns[:, 7]
 
         def process_post(post):
             mask = (post_ids == post)
             post_leos = jnp.where(mask, LEO_values, -jnp.inf)
             top2 = jnp.argsort(post_leos)[-2:]
-            # sums = col4[top2] + col5[top2]
             nand_sum = jnp.sum(col4[top2])
             nor_sum = jnp.sum(col5[top2])
-            sums = jnp.stack([nand_sum, nor_sum])
+            and_sum = jnp.sum(col6[top2])
+            or_sum = jnp.sum(col7[top2])
+            sums = jnp.stack([nand_sum, nor_sum, and_sum, or_sum])
             argmax_idx = jnp.argmax(sums)
             top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
             return top2_mask & mask, argmax_idx
@@ -116,25 +102,7 @@ class HyperNEATFeedForwardLGNClass(HyperNEAT):
         # Set the second column of h_nodes to the argmax indices
         h_nodes = h_nodes.at[:, 1].set(argmax_indices)
         return h_conns, h_nodes
-    
 
-    # def keep_top2_per_postsynaptic_old(self, h_conns, h_nodes):
-    #     post_ids = h_conns[:, 1]
-    #     LEO_values = h_conns[:, 3]
-    #     # Use h_nodes as the list of post-synaptic neuron indices
-    #     def mask_for_post(post):
-    #         mask = (post_ids == post)
-    #         post_leos = jnp.where(mask, LEO_values, -jnp.inf)
-    #         top2 = jnp.argsort(post_leos)[-2:]
-    #         top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
-    #         return top2_mask & mask
-
-        
-
-    #     all_masks = jax.vmap(mask_for_post)(h_nodes[:, 0])
-    #     final_mask = jnp.any(all_masks, axis=0)
-    #     h_conns = h_conns.at[:, 2].set(jnp.where(final_mask, 1.0, jnp.nan))
-    #     return h_conns
     
 
 class HyperNEATLGNNode(BaseNode):
@@ -144,7 +112,7 @@ class HyperNEATLGNNode(BaseNode):
     def __init__(
         self,
         activation_default: Optional[Callable] = None,
-        activation_options: Union[Callable, Sequence[Callable]] = [ACT.nand, ACT.nor],
+        activation_options: Union[Callable, Sequence[Callable]] = [ACT.nand, ACT.nor, ACT.and_gate, ACT.or_gate],
     ):
         super().__init__()
         
@@ -215,7 +183,7 @@ class HyperNEATLGNConn(HyperNEATConn):
     custom_attrs = ["weight"]
 
     def repr(self, state, conn, precision=2, idx_width=3, func_width=8):
-        in_idx, out_idx, weight, leo_value, nand, nor = conn
+        in_idx, out_idx, weight, leo_value, nand, nor, and_gate, or_gate = conn
 
         in_idx = int(in_idx)
         out_idx = int(out_idx)
@@ -223,8 +191,10 @@ class HyperNEATLGNConn(HyperNEATConn):
         leo_value = round(float(leo_value), precision*2)
         nand = round(float(nand), precision*2)
         nor = round(float(nor), precision*2)
+        and_gate = round(float(and_gate), precision*2)
+        or_gate = round(float(or_gate), precision*2)
 
-        return "{}(in: {:<{idx_width}}, out: {:<{idx_width}}, weight: {:<{float_width}}, leo: {:<{float_width}}, nand: {:<{float_width}}, nor: {:<{float_width}})".format(
+        return "{}(in: {:<{idx_width}}, out: {:<{idx_width}}, weight: {:<{float_width}}, leo: {:<{float_width}}, nand: {:<{float_width}}, nor: {:<{float_width}}, and: {:<{float_width}}, or: {:<{float_width}})".format(
             self.__class__.__name__,
             in_idx,
             out_idx,
@@ -232,6 +202,8 @@ class HyperNEATLGNConn(HyperNEATConn):
             leo_value,
             nand,
             nor,
+            and_gate,
+            or_gate,
             idx_width=idx_width,
             float_width=precision + 3,
         )

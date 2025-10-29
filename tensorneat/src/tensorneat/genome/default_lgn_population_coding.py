@@ -200,8 +200,12 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
                 if network["nodes"][node].get("idx") == node:
                     if network["nodes"][node].get("act_func_idx") == 0: # nand
                         G.add_node(node, subset=node2layer[node], size=size[1], color=color[1])
-                    else: # nor
+                    elif network["nodes"][node].get("act_func_idx") == 1: # nor
                         G.add_node(node, subset=node2layer[node], size=size[1], color=color[3])
+                    elif network["nodes"][node].get("act_func_idx") == 2: # and
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="green")
+                    elif network["nodes"][node].get("act_func_idx") == 3: # or
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="red")
                 else:
                     raise ValueError("Node idx does not match the key in network['nodes']")
 
@@ -211,10 +215,6 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
             G.add_edge(conn[0], conn[1])
         pos = nx.multipartite_layout(G, subset_key=subset_key)
 
-        # if layout == "spring":
-        #     pos = nx.spring_layout(G, pos = pos, fixed=input_idx + output_idx, weight=None)
-        # elif layout == "spectral":
-        #     pos = nx.spectral_layout(G, weight=None)
 
         def rotate_layout(pos, angle):
             angle_rad = np.deg2rad(angle)
@@ -232,42 +232,6 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
         node_sizes = [n["size"] for n in G.nodes.values()]
         node_colors = [n["color"] for n in G.nodes.values()]
 
-        # for layer, nodes in enumerate(topo_layers):
-        #     if layer < 2 or len(nodes) == 0:
-        #         continue
-        #     arc_edges_posi, arc_edges_nega = [], []
-        #     for node in nodes:
-        #         for input_node in input_idx:
-        #             if (input_node, node) not in conns_list:
-        #                 continue
-        #             relative_pos = pos[input_node] - pos[node]
-        #             relative_pos = relative_pos[0] * relative_pos[1]
-        #             if relative_pos > 0:
-        #                 arc_edges_posi.append((input_node, node))
-        #             else:
-        #                 arc_edges_nega.append((input_node, node))
-        #     if len(arc_edges_posi) > 0:
-        #         nx.draw_networkx_edges(
-        #             G,
-        #             pos=rotated_pos,
-        #             edgelist=arc_edges_posi,
-        #             arrowstyle=arrowstyle,
-        #             arrowsize=arrowsize,
-        #             edge_color=edge_color,
-        #             connectionstyle="arc3,rad=0.5"
-        #         )
-        #         G.remove_edges_from(arc_edges_posi)
-        #     if len(arc_edges_nega) > 0:
-        #         nx.draw_networkx_edges(
-        #             G,
-        #             pos=rotated_pos,
-        #             edgelist=arc_edges_nega,
-        #             arrowstyle=arrowstyle,
-        #             arrowsize=arrowsize,
-        #             edge_color=edge_color,
-        #             connectionstyle="arc3,rad=-0.5"
-        #         )
-        #         G.remove_edges_from(arc_edges_nega)
 
         nx.draw(
             G,

@@ -138,3 +138,19 @@ class SympyNor(sp.Function):
         if len(z.args) != 2:
             raise ValueError("NOR function requires exactly two inputs.")
         return 1 - sp.Max(z.args[0], z.args[1])
+    
+
+class SympyAnd(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("AND function requires exactly two inputs.")
+        return z.args[0] * z.args[1]
+    
+
+class SympyOr(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("OR function requires exactly two inputs.")
+        return sp.Max(z.args[0], z.args[1])

@@ -25,6 +25,8 @@ act_name2jnp = {
     "abs_root": abs_root_,
     "nand": nand_,
     "nor": nor_,
+    "and_gate": and_,
+    "or_gate": or_,
 }
 
 act_name2sympy = {
@@ -47,6 +49,8 @@ act_name2sympy = {
     "abs_root": SympyAbsRoot,
     "nand": SympyNand,
     "nor": SympyNor,
+    "and_gate": SympyAnd,
+    "or_gate": SympyOr,
 }
 
 agg_name2jnp = {
