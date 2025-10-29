@@ -33,9 +33,7 @@ class DefaultGenomeCPPN(DefaultGenome):
         num_outputs: int,
         max_nodes=50,
         max_conns=100,
-        node_gene=DefaultNode(
-            activation_options=[ACT.gaussian, ACT.sigmoid, ACT.sin, ACT.abs],
-            aggregation_options=[AGG.sum, AGG.product]),
+        node_gene=DefaultNode(activation_options=[ACT.gaussian, ACT.sigmoid, ACT.sin, ACT.abs, ACT.square]),
         conn_gene=DefaultConn(),
         mutation=DefaultMutation(),
         crossover=DefaultCrossover(),
