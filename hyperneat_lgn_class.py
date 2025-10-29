@@ -29,7 +29,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [6, 5, 5, 10]
+    layers = [6, 20, 20, 20]
 
     neat_inputs = 4
     neat_outputs = 5
