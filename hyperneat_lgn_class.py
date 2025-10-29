@@ -98,7 +98,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=100000,
+        generation_limit=10000,
         seed=3
     )
 
@@ -117,6 +117,8 @@ if __name__ == "__main__":
         f_settings.write(f"Seed: {pipeline.seed}\n")
         f_settings.write(f"Problem task: {pipeline.problem.__class__.__name__}\n")
         f_settings.write(f"Elites: {algorithm.neat.species_controller.species_elitism}\n")
+        f_settings.write(f"NEAT activation options {algorithm.neat.genome.node_gene.activation_options}\n")
+        f_settings.write(f"NEAT aggregation options {algorithm.neat.genome.node_gene.aggregation_options}\n")
 
 
 
