@@ -9,7 +9,7 @@ from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat import HyperNEAT, H
 from tensorneat.src.tensorneat.algorithm.hyperneat.hyperneat_conn_improved import HyperNEATConnImproved
 from tensorneat.src.tensorneat.common import ACT, AGG
 from tensorneat.src.tensorneat.algorithm import NEAT
-from tensorneat.src.tensorneat.genome import DefaultGenome, DefaultGenomeSoftmax
+from tensorneat.src.tensorneat.genome import DefaultGenome, DefaultGenomeSoftmax, DefaultGenomePopulationCoding
 
 
 class HyperNEATFeedForwardCust(HyperNEAT):
@@ -33,9 +33,10 @@ class HyperNEATFeedForwardCust(HyperNEAT):
         self.neat = neat
         self.weight_threshold = weight_threshold
         self.max_weight = max_weight
-        self.hyper_genome = DefaultGenomeSoftmax(
+        self.hyper_genome = DefaultGenomePopulationCoding(
             num_inputs=substrate.num_inputs,
             num_outputs=substrate.num_outputs,
+            num_classes=2,
             max_nodes=substrate.nodes_cnt,
             max_conns=substrate.conns_cnt,
             node_gene=HyperNEATNode(aggregation, activation),

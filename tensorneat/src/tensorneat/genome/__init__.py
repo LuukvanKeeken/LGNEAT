@@ -6,3 +6,4 @@ from .recurrent import RecurrentGenome
 from .default_lgn import DefaultGenomeLGN
 from .default_cppn import DefaultGenomeCPPN
 from .default_softmax import DefaultGenomeSoftmax
+from .default_population_coding import DefaultGenomePopulationCoding
