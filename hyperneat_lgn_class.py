@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     neat_inputs = 4
     neat_outputs = 3
-    neat_hidden_layers = (2,)
+    neat_hidden_layers = (2, 2)
 
     algorithm=HyperNEATFeedForwardLGNClass(
             substrate=LGNSubstrateLEO(
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=200000,
+        generation_limit=10000,
         seed=3
     )
 
