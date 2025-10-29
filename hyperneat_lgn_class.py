@@ -56,29 +56,6 @@ if __name__ == "__main__":
         )
     
 
-    # # Check if input coordinates are inside a circle
-    # # Return [1, 0] if inside, else [0, 1]
-    # def inside_circle(inputs, radius=0.5):
-    #     x, y = inputs
-    #     res = jnp.square(x) + jnp.square(y)
-        
-    #     return jnp.array([1, 0]) if res <= radius**2 else jnp.array([0, 1])
-    
-    # inside_circle_problem = CustomFuncFit(
-    #     func = inside_circle,
-    #     low_bounds = [-1, -1],
-    #     upper_bounds = [1, 1],
-    #     method = "sample",
-    #     num_samples = 20
-    # )
-
-    # pipeline = Pipeline(
-    #     algorithm=algorithm,
-    #     problem=inside_circle_problem,
-    #     generation_limit=2,
-    #     seed=3
-    # )
-
 
     # Inputs is a vector of ones and zeros. Count the number
     # of ones, and return 1 if that number is even, otherwise 0
@@ -98,7 +75,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=30000,
+        generation_limit=10000,
         seed=3
     )
 
