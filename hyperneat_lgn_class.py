@@ -42,7 +42,7 @@ if __name__ == "__main__":
             neat=NEAT(
                 pop_size=1000,
                 species_size=20,
-                survival_threshold=0.2,
+                survival_threshold=0.01,
                 species_elitism=1,
                 genome=DefaultGenomeCPPN(
                     num_inputs=neat_inputs,  # size of query coors
