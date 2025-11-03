@@ -75,7 +75,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=200000,
+        generation_limit=20000,
         seed=3
     )
 
