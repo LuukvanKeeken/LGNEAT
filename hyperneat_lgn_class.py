@@ -42,7 +42,7 @@ if __name__ == "__main__":
             neat=NEAT(
                 pop_size=1000,
                 species_size=20,
-                survival_threshold=0.01,
+                survival_threshold=0.1,
                 species_elitism=1,
                 genome=DefaultGenomeCPPN(
                     num_inputs=neat_inputs,  # size of query coors
@@ -96,6 +96,7 @@ if __name__ == "__main__":
         f_settings.write(f"Elites: {algorithm.neat.species_controller.species_elitism}\n")
         f_settings.write(f"NEAT activation options {algorithm.neat.genome.node_gene.activation_options}\n")
         f_settings.write(f"NEAT aggregation options {algorithm.neat.genome.node_gene.aggregation_options}\n")
+        f_settings.write(f"Survival threshold: {algorithm.neat.species_controller.survival_threshold}\n")
 
 
 
