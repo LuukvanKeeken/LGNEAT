@@ -91,7 +91,8 @@ class HyperNEATFeedForwardLGNClass(HyperNEAT):
             and_sum = jnp.sum(col6[top2])
             or_sum = jnp.sum(col7[top2])
             sums = jnp.stack([nand_sum, nor_sum, and_sum, or_sum])
-            argmax_idx = jnp.argmax(sums)
+            safe_sums = jnp.where(jnp.isnan(sums), -jnp.inf, sums)
+            argmax_idx = jnp.argmax(safe_sums)
             top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
             return top2_mask & mask, argmax_idx
 
