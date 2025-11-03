@@ -103,3 +103,55 @@ def or_(z):
     if z.shape[0] != 2:
         raise ValueError("Input must have exactly two elements")
     return jnp.maximum(z[0], z[1])
+
+
+# FALSE gate operation, always returns 0
+def false_(z):
+    return jnp.array(0.0)
+
+
+# A AND NOT B gate operation with z having two elements
+def a_and_not_b_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return z[0] * (1 - z[1])
+
+
+# A gate operation, returns the first element
+def a_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return z[0]
+
+
+# XOR gate operation with z having two elements
+def xor_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return jnp.where(z[0] != z[1], 1.0, 0.0)
+
+
+# XNOR gate operation with z having two elements
+def xnor_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return jnp.where(z[0] == z[1], 1.0, 0.0)
+
+
+# NOT A gate operation, returns 1 - first element
+def not_a_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return 1 - z[0]
+
+
+# A OR NOT B gate operation with z having two elements
+def a_or_not_b_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return jnp.maximum(z[0], 1 - z[1])
+
+
+# TRUE gate operation, always returns 1
+def true_(z):
+    return jnp.array(1.0)

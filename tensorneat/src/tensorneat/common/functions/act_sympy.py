@@ -154,3 +154,63 @@ class SympyOr(sp.Function):
         if len(z.args) != 2:
             raise ValueError("OR function requires exactly two inputs.")
         return sp.Max(z.args[0], z.args[1])
+    
+
+class SympyFalse(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        return 0
+    
+
+class SympyAAndNotB(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("A AND NOT B function requires exactly two inputs.")
+        return z.args[0] * (1 - z.args[1])
+
+
+class SympyAGate(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("A gate function requires exactly two inputs.")
+        return z.args[0]
+    
+
+class SympyXor(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("XOR function requires exactly two inputs.")
+        return z.args[0] + z.args[1] - 2 * z.args[0] * z.args[1]
+    
+
+class SympyXnor(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("XNOR function requires exactly two inputs.")
+        return 1 - (z.args[0] + z.args[1] - 2 * z.args[0] * z.args[1])
+    
+
+class SympyNotAGate(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("NOT A gate function requires exactly two inputs.")
+        return 1 - z.args[0]
+    
+
+class SympyAOrNotB(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("A OR NOT B function requires exactly two inputs.")
+        return sp.Max(z.args[0], 1 - z.args[1])
+    
+
+class SympyTrue(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        return 1

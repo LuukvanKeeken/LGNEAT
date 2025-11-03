@@ -27,7 +27,7 @@ class LGNSubstrateLEO(DefaultSubstrate):
     
     def make_conns(self, query_res):
         # Set the LEO values and four gate outputs
-        return self.conns.at[:, -5:].set(query_res)
+        return self.conns.at[:, -13:].set(query_res)
 
 
 
@@ -88,8 +88,8 @@ def analysis_substrate(layers, coor_range):
     nodes = np.zeros((len(ordered_nodes), 2))
     nodes[:, 0] = ordered_nodes
     conns = np.zeros(
-        (len(correspond_keys), 8), dtype=np.float32
-    )  # input_idx, output_idx, weight, leo, nand, nor, and, or
+        (len(correspond_keys), 16), dtype=np.float32
+    )  # input_idx, output_idx, weight, leo, nand, nor, and, or, false, a_and_not_b, a, xor, xnor, not_a, a_or_not_b, true
     conns[:, :2] = correspond_keys
 
     query_coors = np.array(query_coors)

@@ -27,6 +27,14 @@ act_name2jnp = {
     "nor": nor_,
     "and_gate": and_,
     "or_gate": or_,
+    "false_gate": false_,
+    "a_and_not_b_gate": a_and_not_b_,
+    "a_gate": a_,
+    "xor_gate": xor_,
+    "xnor_gate": xnor_,
+    "not_a_gate": not_a_,
+    "a_or_not_b_gate": a_or_not_b_,
+    "true_gate": true_,
 }
 
 act_name2sympy = {
@@ -51,6 +59,14 @@ act_name2sympy = {
     "nor": SympyNor,
     "and_gate": SympyAnd,
     "or_gate": SympyOr,
+    "false_gate": SympyFalse,
+    "a_and_not_b_gate": SympyAAndNotB,
+    "a_gate": SympyAGate,
+    "xor_gate": SympyXor,
+    "xnor_gate": SympyXnor,
+    "not_a_gate": SympyNotAGate,
+    "a_or_not_b_gate": SympyAOrNotB,
+    "true_gate": SympyTrue,
 }
 
 agg_name2jnp = {

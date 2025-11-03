@@ -199,13 +199,29 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
                 # Colour the hidden nodes based on their activation function
                 if network["nodes"][node].get("idx") == node:
                     if network["nodes"][node].get("act_func_idx") == 0: # nand
-                        G.add_node(node, subset=node2layer[node], size=size[1], color=color[1])
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="white")
                     elif network["nodes"][node].get("act_func_idx") == 1: # nor
-                        G.add_node(node, subset=node2layer[node], size=size[1], color=color[3])
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="gray")
                     elif network["nodes"][node].get("act_func_idx") == 2: # and
                         G.add_node(node, subset=node2layer[node], size=size[1], color="green")
                     elif network["nodes"][node].get("act_func_idx") == 3: # or
                         G.add_node(node, subset=node2layer[node], size=size[1], color="red")
+                    elif network["nodes"][node].get("act_func_idx") == 4: # false
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="black")
+                    elif network["nodes"][node].get("act_func_idx") == 5: # a_and_not_b
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="purple")
+                    elif network["nodes"][node].get("act_func_idx") == 6: # a
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="orange")
+                    elif network["nodes"][node].get("act_func_idx") == 7: # xor
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="pink")
+                    elif network["nodes"][node].get("act_func_idx") == 8: # xnor
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="cyan")
+                    elif network["nodes"][node].get("act_func_idx") == 9: # not_a
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="brown")
+                    elif network["nodes"][node].get("act_func_idx") == 10: # a_or_not_b
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="magenta")
+                    elif network["nodes"][node].get("act_func_idx") == 11: # true
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgray")
                 else:
                     raise ValueError("Node idx does not match the key in network['nodes']")
 
