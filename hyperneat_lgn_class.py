@@ -69,13 +69,15 @@ if __name__ == "__main__":
         low_bounds = jnp.zeros(6),
         upper_bounds = jnp.ones(6)*1.1,
         method = "grid",
-        step_size = jnp.ones(6)
+        step_size = jnp.ones(6),
+        train_test_split=0.8,
+        split_seed=42
     )
 
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        generation_limit=1000000,
+        generation_limit=3000,
         seed=3
     )
 
@@ -97,6 +99,8 @@ if __name__ == "__main__":
         f_settings.write(f"NEAT activation options {algorithm.neat.genome.node_gene.activation_options}\n")
         f_settings.write(f"NEAT aggregation options {algorithm.neat.genome.node_gene.aggregation_options}\n")
         f_settings.write(f"Survival threshold: {algorithm.neat.species_controller.survival_threshold}\n")
+        f_settings.write(f"Train/test split: {pipeline.problem.train_test_split}\n")
+        f_settings.write(f"Split seed: {pipeline.problem.split_seed}\n")
 
 
 

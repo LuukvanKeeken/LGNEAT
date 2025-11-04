@@ -1,6 +1,7 @@
 from typing import Callable, Union, List, Tuple
 from jax import vmap, Array, numpy as jnp
 import numpy as np
+import jax
 
 from .func_fit import FuncFit
 
@@ -15,6 +16,8 @@ class CustomFuncFit(FuncFit):
         method: str = "sample",
         num_samples: int = 100,
         step_size: Array = None,
+        train_test_split: float = 0.8,
+        split_seed: int = 42,
         *args,
         **kwargs,
     ):
@@ -39,6 +42,9 @@ class CustomFuncFit(FuncFit):
         self.method = method
         self.num_samples = num_samples
         self.step_size = step_size
+
+        self.train_test_split = train_test_split
+        self.split_seed = split_seed
 
         self.generate_dataset()
 
@@ -84,6 +90,17 @@ class CustomFuncFit(FuncFit):
         self.data_inputs = jnp.array(inputs)
         self.data_outputs = jnp.array(outputs)
 
+        # Create train/test split
+        rng_state = np.random.get_state()
+        np.random.seed(self.split_seed)
+        num_data = self.data_inputs.shape[0]
+        indices = np.arange(num_data)
+        np.random.shuffle(indices)
+        split_idx = int(num_data * self.train_test_split)
+        self.train_indices = indices[:split_idx]
+        self.test_indices = indices[split_idx:]
+        np.random.set_state(rng_state)
+
     @property
     def inputs(self):
         return self.data_inputs
@@ -99,6 +116,94 @@ class CustomFuncFit(FuncFit):
     @property
     def output_shape(self):
         return self.data_outputs.shape
+    
+    @property
+    def train_idx(self):
+        return self.train_indices
+    
+    @property
+    def test_idx(self):
+        return self.test_indices
+    
+
+
+    def evaluate(self, state, randkey, act_func, params, train = True):
+
+        predict = vmap(act_func, in_axes=(None, None, 0))(
+            state, params, self.inputs[self.train_idx if train else self.test_idx]
+        )
+
+        targets = self.targets[self.train_idx if train else self.test_idx]
+
+        if self.error_method == "mse":
+            loss = jnp.mean((predict - targets) ** 2)
+
+        elif self.error_method == "rmse":
+            loss = jnp.sqrt(jnp.mean((predict - targets) ** 2))
+
+        elif self.error_method == "mae":
+            loss = jnp.mean(jnp.abs(predict - targets))
+
+        elif self.error_method == "mape":
+            loss = jnp.mean(jnp.abs((predict - targets) / targets))
+
+        elif self.error_method == "bce":
+            epsilon = 1e-7  # small constant to avoid log(0)
+            loss = -jnp.mean(
+                targets * jnp.log(predict + epsilon)
+                + (1 - targets) * jnp.log(1 - predict + epsilon)
+            )
+
+        elif self.error_method == "cce":
+            epsilon = 1e-7  # small constant to avoid log(0)
+            loss = -jnp.mean(jnp.sum(targets * jnp.log(predict + epsilon), axis=-1))
+
+        else:
+            raise NotImplementedError
+
+        return -loss
+    
+
+    def evaluate_threshold(self, state, randkey, act_func, params, threshold=0.5, train = True):
+        predict = vmap(act_func, in_axes=(None, None, 0))(
+            state, params, self.inputs[self.train_idx if train else self.test_idx]
+        )
+        predict = (predict >= threshold).astype(jnp.float32)
+
+        accuracy = jnp.mean(predict == self.targets[self.train_idx if train else self.test_idx])
+        return accuracy
+
+
+
+    def show(self, state, randkey, act_func, params, *args, **kwargs):
+        predict = vmap(act_func, in_axes=(None, None, 0))(
+            state, params, self.inputs
+        )
+        inputs, target, predict = jax.device_get([self.inputs, self.targets, predict])
+
+        # Binarize predictions
+        predict_bin = (predict >= 0.5).astype(jnp.float32)
+
+        fitness_train = self.evaluate(state, randkey, act_func, params, train=True)
+        fitness_test = self.evaluate(state, randkey, act_func, params, train=False)
+        accuracy_train = self.evaluate_threshold(state, randkey, act_func, params, train=True)
+        accuracy_test = self.evaluate_threshold(state, randkey, act_func, params, train=False)
+
+        loss_train = -fitness_train
+        loss_test = -fitness_test
+
+        msg = ""
+        msg += "Training Data:\n"
+        for i in range(inputs[self.train_idx].shape[0]):
+            msg += f"input: {inputs[self.train_idx][i]}, target: {target[self.train_idx][i]}, predict: {predict[self.train_idx][i]} {predict_bin[self.train_idx][i]}\n"
+        msg += f"loss: {loss_train}\n"
+        msg += f"accuracy: {accuracy_train}\n\n"
+        msg += "Testing Data:\n"
+        for i in range(inputs[self.test_idx].shape[0]):
+            msg += f"input: {inputs[self.test_idx][i]}, target: {target[self.test_idx][i]}, predict: {predict[self.test_idx][i]} {predict_bin[self.test_idx][i]}\n"
+        msg += f"loss: {loss_test}\n"
+        msg += f"accuracy: {accuracy_test}\n"
+        print(msg)
 
 
 def cartesian_product(arr1, arr2):

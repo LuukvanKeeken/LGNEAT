@@ -24,13 +24,9 @@ class FuncFit(BaseProblem):
             state, params, self.inputs
         )
 
-        # temp = 0.01
-        # predict_exp = jnp.exp(predict / temp)
-        # predict_prob = predict_exp / jnp.sum(predict_exp, axis=1, keepdims=True)
 
         if self.error_method == "mse":
             loss = jnp.mean((predict - self.targets) ** 2)
-            # loss = jnp.mean((predict_prob - self.targets) ** 2)
 
         elif self.error_method == "rmse":
             loss = jnp.sqrt(jnp.mean((predict - self.targets) ** 2))
