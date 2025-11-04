@@ -77,7 +77,7 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        fitness_target=-0.01,
+        fitness_target=-0.1,
         generation_limit=10000,
         seed=3
     )
@@ -128,7 +128,19 @@ if __name__ == "__main__":
         with contextlib.redirect_stdout(f_best):
 
             print(f"Total time: {time.time() - start_time:.2f} seconds")
-            print(f"Approximate time/generation: {(time.time() - start_time)/pipeline.generation_limit:.2f} seconds\n")
+
+            # To get the approximate number of actually completed generations,
+            # read out the first number in the first line of current_gen.txt
+            # First check if the file actually exists.
+            completed_generations = pipeline.generation_limit
+            if os.path.exists(f"results/{timestamp}_lgn/current_gen.txt"):
+                with open(f"results/{timestamp}_lgn/current_gen.txt", "r") as f:
+                    first_line = f.readline()
+                    # Check if the line is not empty
+                    if first_line:
+                        completed_generations = int(first_line.split("/")[0].split(" ")[1])
+
+            print(f"Approximate time/generation: {(time.time() - start_time)/completed_generations:.2f} seconds\n")
 
             start_time_test = time.time()
             # show result

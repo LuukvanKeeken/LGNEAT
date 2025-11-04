@@ -174,9 +174,6 @@ class Pipeline(StatefulBaseClass):
                     print(f"Best genome fitness: {best_fitness}")
                     print(f"Best genome: {best_genome}")
 
-                    for fit in range(len(fitnesses)):
-                        print(f"Genome {fit} fitness: {fitnesses[fit]}")
-                    break
 
                 # overwrite the previous progress line instead of appending
                 # move to file start, write the line, then truncate the rest
