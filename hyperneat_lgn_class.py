@@ -71,7 +71,7 @@ if __name__ == "__main__":
         method = "grid",
         step_size = jnp.ones(6),
         train_test_split=0.8,
-        split_seed=5
+        split_seed=42
     )
 
     pipeline = Pipeline(
