@@ -29,7 +29,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [6, 4, 4, 4]
+    layers = [6, 4, 4]
 
     neat_inputs = 4
     neat_outputs = 17
@@ -77,8 +77,8 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        fitness_target=-0.01,
-        generation_limit=50000,
+        fitness_target=-0.127,
+        generation_limit=10000,
         seed=3
     )
 
