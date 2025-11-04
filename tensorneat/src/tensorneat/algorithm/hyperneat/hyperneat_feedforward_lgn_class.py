@@ -89,6 +89,10 @@ class HyperNEATFeedForwardLGNClass(HyperNEAT):
         col13 = h_conns[:, 13]
         col14 = h_conns[:, 14]
         col15 = h_conns[:, 15]
+        col16 = h_conns[:, 16]
+        col17 = h_conns[:, 17]
+        col18 = h_conns[:, 18]
+        col19 = h_conns[:, 19]
 
         def process_post(post):
             mask = (post_ids == post)
@@ -106,9 +110,14 @@ class HyperNEATFeedForwardLGNClass(HyperNEAT):
             not_a_sum = jnp.sum(col13[top2])
             a_or_not_b_sum = jnp.sum(col14[top2])
             true_sum = jnp.sum(col15[top2])
+            not_a_and_b_sum = jnp.sum(col16[top2])
+            b_sum = jnp.sum(col17[top2])
+            not_b_sum = jnp.sum(col18[top2])
+            not_a_or_b_sum = jnp.sum(col19[top2])
             sums = jnp.stack([nand_sum, nor_sum, and_sum, or_sum,
                               false_sum, a_and_not_b_sum, a_sum, xor_sum,
-                              xnor_sum, not_a_sum, a_or_not_b_sum, true_sum])
+                              xnor_sum, not_a_sum, a_or_not_b_sum, true_sum,
+                              not_a_and_b_sum, b_sum, not_b_sum, not_a_or_b_sum])
             safe_sums = jnp.where(jnp.isnan(sums), -jnp.inf, sums)
             argmax_idx = jnp.argmax(safe_sums)
             top2_mask = jnp.zeros_like(LEO_values, dtype=bool).at[top2].set(True)
@@ -134,7 +143,9 @@ class HyperNEATLGNNode(BaseNode):
         activation_options: Union[Callable, Sequence[Callable]] = [ACT.nand, ACT.nor, ACT.and_gate, ACT.or_gate,
                                                                     ACT.false_gate, ACT.a_and_not_b_gate,
                                                                     ACT.a_gate, ACT.xor_gate, ACT.xnor_gate,
-                                                                    ACT.not_a_gate, ACT.a_or_not_b_gate, ACT.true_gate],
+                                                                    ACT.not_a_gate, ACT.a_or_not_b_gate, ACT.true_gate,
+                                                                    ACT.not_a_and_b_gate, ACT.b_gate,
+                                                                    ACT.not_b_gate, ACT.not_a_or_b_gate],
     ):
         super().__init__()
         
@@ -205,7 +216,7 @@ class HyperNEATLGNConn(HyperNEATConn):
     custom_attrs = ["weight"]
 
     def repr(self, state, conn, precision=2, idx_width=3, func_width=8):
-        in_idx, out_idx, weight, leo_value, nand, nor, and_gate, or_gate, false, a_and_not_b, a, xor, xnor, not_a, a_or_not_b, true = conn
+        in_idx, out_idx, weight, leo_value, nand, nor, and_gate, or_gate, false, a_and_not_b, a, xor, xnor, not_a, a_or_not_b, true, not_a_and_b, b, not_b, not_a_or_b = conn
 
         in_idx = int(in_idx)
         out_idx = int(out_idx)
@@ -223,8 +234,12 @@ class HyperNEATLGNConn(HyperNEATConn):
         not_a = round(float(not_a), precision*2)
         a_or_not_b = round(float(a_or_not_b), precision*2)
         true = round(float(true), precision*2)
+        not_a_and_b = round(float(not_a_and_b), precision*2)
+        b = round(float(b), precision*2)
+        not_b = round(float(not_b), precision*2)
+        not_a_or_b = round(float(not_a_or_b), precision*2)
 
-        return "{}(in: {:<{idx_width}}, out: {:<{idx_width}}, weight: {:<{float_width}}, leo: {:<{float_width}}, nand: {:<{float_width}}, nor: {:<{float_width}}, and: {:<{float_width}}, or: {:<{float_width}}, false: {:<{float_width}}, a_and_not_b: {:<{float_width}}, a: {:<{float_width}}, xor: {:<{float_width}}, xnor: {:<{float_width}}, not_a: {:<{float_width}}, a_or_not_b: {:<{float_width}}, true: {:<{float_width}})".format(
+        return "{}(in: {:<{idx_width}}, out: {:<{idx_width}}, weight: {:<{float_width}}, leo: {:<{float_width}}, nand: {:<{float_width}}, nor: {:<{float_width}}, and: {:<{float_width}}, or: {:<{float_width}}, false: {:<{float_width}}, a_and_not_b: {:<{float_width}}, a: {:<{float_width}}, xor: {:<{float_width}}, xnor: {:<{float_width}}, not_a: {:<{float_width}}, a_or_not_b: {:<{float_width}}, true: {:<{float_width}}, not_a_and_b: {:<{float_width}}, b: {:<{float_width}}, not_b: {:<{float_width}}, not_a_or_b: {:<{float_width}})".format(
             self.__class__.__name__,
             in_idx,
             out_idx,
@@ -242,12 +257,16 @@ class HyperNEATLGNConn(HyperNEATConn):
             not_a,
             a_or_not_b,
             true,
+            not_a_and_b,
+            b,
+            not_b,
+            not_a_or_b,
             idx_width=idx_width,
             float_width=precision + 3,
         )
 
     def to_dict(self, state, conn):
-        in_idx, out_idx, weight, leo_value, nand, nor, and_gate, or_gate, false, a_and_not_b, a, xor, xnor, not_a, a_or_not_b, true = conn
+        in_idx, out_idx, weight, leo_value, nand, nor, and_gate, or_gate, false, a_and_not_b, a, xor, xnor, not_a, a_or_not_b, true, not_a_and_b, b, not_b, not_a_or_b = conn
         return {
             "in": int(in_idx),
             "out": int(out_idx),
@@ -265,4 +284,8 @@ class HyperNEATLGNConn(HyperNEATConn):
             "not_a": float(not_a),
             "a_or_not_b": float(a_or_not_b),
             "true": float(true),
+            "not_a_and_b": float(not_a_and_b),
+            "b": float(b),
+            "not_b": float(not_b),
+            "not_a_or_b": float(not_a_or_b),
         }

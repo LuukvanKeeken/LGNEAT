@@ -214,3 +214,35 @@ class SympyTrue(sp.Function):
     @classmethod
     def eval(cls, z):
         return 1
+    
+
+class SympyNotAAndB(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("NOT A AND B function requires exactly two inputs.")
+        return (1 - z.args[0]) * z.args[1]
+    
+
+class SympyBGate(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("B gate function requires exactly two inputs.")
+        return z.args[1]
+    
+
+class SympyNotBGate(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("NOT B gate function requires exactly two inputs.")
+        return 1 - z.args[1]
+    
+
+class SympyNotAOrB(sp.Function):
+    @classmethod
+    def eval(cls, z):
+        if len(z.args) != 2:
+            raise ValueError("NOT A OR B function requires exactly two inputs.")
+        return sp.Max(1 - z.args[0], z.args[1])

@@ -222,6 +222,14 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
                         G.add_node(node, subset=node2layer[node], size=size[1], color="magenta")
                     elif network["nodes"][node].get("act_func_idx") == 11: # true
                         G.add_node(node, subset=node2layer[node], size=size[1], color="lightgray")
+                    elif network["nodes"][node].get("act_func_idx") == 12: # not_a_and_b
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgreen")
+                    elif network["nodes"][node].get("act_func_idx") == 13: # b
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightblue")
+                    elif network["nodes"][node].get("act_func_idx") == 14: # not_b
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightcoral")
+                    elif network["nodes"][node].get("act_func_idx") == 15: # not_a_or_b
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightyellow")
                 else:
                     raise ValueError("Node idx does not match the key in network['nodes']")
 

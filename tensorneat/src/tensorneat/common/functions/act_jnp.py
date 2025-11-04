@@ -155,3 +155,31 @@ def a_or_not_b_(z):
 # TRUE gate operation, always returns 1
 def true_(z):
     return jnp.array(1.0)
+
+
+# NOT A AND B gate operation with z having two elements
+def not_a_and_b_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return (1 - z[0]) * z[1]
+
+
+# B gate operation, returns the second element
+def b_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return z[1]
+
+
+# NOT B gate operation, returns 1 - second element
+def not_b_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return 1 - z[1]
+
+
+# NOT A OR B gate operation with z having two elements
+def not_a_or_b_(z):
+    if z.shape[0] != 2:
+        raise ValueError("Input must have exactly two elements")
+    return jnp.maximum(1 - z[0], z[1])
