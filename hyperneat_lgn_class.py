@@ -29,7 +29,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [6, 10, 10, 10, 10, 10]
+    layers = [8, 10, 10, 10, 10, 10]
 
     neat_inputs = 4
     neat_outputs = 13
@@ -66,10 +66,10 @@ if __name__ == "__main__":
 
     even_problem = CustomFuncFit(
         func = even_ones,
-        low_bounds = jnp.zeros(6),
-        upper_bounds = jnp.ones(6)*1.1,
+        low_bounds = jnp.zeros(8),
+        upper_bounds = jnp.ones(8)*1.1,
         method = "grid",
-        step_size = jnp.ones(6),
+        step_size = jnp.ones(8),
         train_test_split=0.8,
         split_seed=5
     )
