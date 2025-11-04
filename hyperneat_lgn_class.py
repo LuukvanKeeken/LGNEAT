@@ -48,7 +48,7 @@ if __name__ == "__main__":
                     num_inputs=neat_inputs,  # size of query coors
                     num_outputs=neat_outputs,
                     init_hidden_layers=neat_hidden_layers,
-                    output_transform=ACT.sigmoid,
+                    output_transform=ACT.identity,
                 ),
             ),
             activation=ACT.nand,
