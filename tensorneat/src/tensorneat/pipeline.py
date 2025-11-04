@@ -165,6 +165,14 @@ class Pipeline(StatefulBaseClass):
 
                 self.analysis(state, previous_pop, fitnesses)
 
+                # overwrite the previous progress line instead of appending
+                # move to file start, write the line, then truncate the rest
+                if (gen+1)%100 == 0:
+                    f_log.seek(0)
+                    f_log.write(f"Generation {gen+1}/{self.generation_limit}\n")
+                    f_log.truncate()
+                    f_log.flush()
+
                 if max(fitnesses) >= self.fitness_target:
                     print("Fitness limit reached!")
                     print(f"{jnp.max(fitnesses)} at {jnp.argmax(fitnesses)}")
@@ -174,14 +182,15 @@ class Pipeline(StatefulBaseClass):
                     print(f"Best genome fitness: {best_fitness}")
                     print(f"Best genome: {best_genome}")
 
-
-                # overwrite the previous progress line instead of appending
-                # move to file start, write the line, then truncate the rest
-                if (gen+1)%100 == 0:
                     f_log.seek(0)
                     f_log.write(f"Generation {gen+1}/{self.generation_limit}\n")
                     f_log.truncate()
                     f_log.flush()
+
+                    
+                    break
+
+                
 
         if int(state.generation) >= self.generation_limit:
             print("Generation limit reached!")
