@@ -40,6 +40,25 @@ LABELS = {
     15: "!a | b",
 }
 
+COLOURS = {
+    0: "white",
+    1: "gray",
+    2: "green",
+    3: "red",
+    4: "black",
+    5: "purple",
+    6: "orange",
+    7: "pink",
+    8: "cyan",
+    9: "brown",
+    10: "magenta",
+    11: "lightgray",
+    12: "lightgreen",
+    13: "lightblue",
+    14: "lightcoral",
+    15: "lightyellow",
+}
+
 
 class DefaultGenomeLGNPopulationCoding(DefaultGenome):
     """Default genome class, with the same behavior as the NEAT-Python"""
@@ -231,7 +250,8 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
                         labels[node] = f"{network['nodes'][node].get('idx')}\n{LABELS.get(network['nodes'][node].get('act_func_idx'), 'unknown')}"
                     else:
                         labels[node] = f"{network['nodes'][node].get('idx')}"
-                G.add_node(node, subset=node2layer[node], size=size[2], color=color[2] if not (with_labels and with_function_labels) else "gray")
+                # G.add_node(node, subset=node2layer[node], size=size[2], color=color[2] if not (with_labels) else "gray")
+                G.add_node(node, subset=node2layer[node], size=size[2], color=color[2] if not (with_labels) else (COLOURS.get(network['nodes'][node].get('act_func_idx'), color[2]) if not with_function_labels else "gray"))
             else:
                 # Colour the hidden nodes based on their activation function
                 if network["nodes"][node].get("idx") == node:
@@ -241,38 +261,40 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
                         else:
                             labels[node] = f"{network['nodes'][node].get('idx')}"
 
-                    if network["nodes"][node].get("act_func_idx") == 0: # nand
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="white")
-                    elif network["nodes"][node].get("act_func_idx") == 1: # nor
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="gray" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 2: # and
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="green" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 3: # or
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="red" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 4: # false
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="black" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 5: # a_and_not_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="purple" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 6: # a
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="orange" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 7: # xor
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="pink" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 8: # xnor
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="cyan" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 9: # not_a
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="brown" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 10: # a_or_not_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="magenta" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 11: # true
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgray" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 12: # not_a_and_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgreen" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 13: # b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightblue" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 14: # not_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightcoral" if not with_function_labels else "white")
-                    elif network["nodes"][node].get("act_func_idx") == 15: # not_a_or_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightyellow" if not with_function_labels else "white")
+
+                    G.add_node(node, subset=node2layer[node], size=size[1], color=COLOURS.get(network['nodes'][node].get('act_func_idx'), 'white') if not (with_function_labels) else "white")
+                    # if network["nodes"][node].get("act_func_idx") == 0: # nand
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="white")
+                    # elif network["nodes"][node].get("act_func_idx") == 1: # nor
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="gray" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 2: # and
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="green" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 3: # or
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="red" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 4: # false
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="black" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 5: # a_and_not_b
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="purple" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 6: # a
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="orange" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 7: # xor
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="pink" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 8: # xnor
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="cyan" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 9: # not_a
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="brown" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 10: # a_or_not_b
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="magenta" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 11: # true
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="lightgray" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 12: # not_a_and_b
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="lightgreen" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 13: # b
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="lightblue" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 14: # not_b
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="lightcoral" if not with_function_labels else "white")
+                    # elif network["nodes"][node].get("act_func_idx") == 15: # not_a_or_b
+                    #     G.add_node(node, subset=node2layer[node], size=size[1], color="lightyellow" if not with_function_labels else "white")
                 else:
                     raise ValueError("Node idx does not match the key in network['nodes']")
 

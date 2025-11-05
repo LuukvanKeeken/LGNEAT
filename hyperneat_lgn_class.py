@@ -29,7 +29,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [8, 10, 10, 10, 10, 2]
+    layers = [8, 4, 4, 10]
 
     neat_inputs = 4
     neat_outputs = 17
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 species_elitism=1,
@@ -78,8 +78,8 @@ if __name__ == "__main__":
         algorithm=algorithm,
         problem=even_problem,
         fitness_target=-0.32,
-        generation_limit=100000,
-        seed=3
+        generation_limit=1,
+        seed=4
     )
 
 
