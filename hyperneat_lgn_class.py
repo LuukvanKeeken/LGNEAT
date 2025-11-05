@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=1000,
+                pop_size=10,
                 species_size=20,
                 survival_threshold=0.01,
                 species_elitism=1,
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         algorithm=algorithm,
         problem=even_problem,
         fitness_target=-0.01,
-        generation_limit=10000,
+        generation_limit=1,
         seed=3
     )
 
@@ -150,12 +150,14 @@ if __name__ == "__main__":
             # visualize the best individual
             network = algorithm.neat.genome.network_dict(state, *best)
             print(algorithm.neat.genome.repr(state, *best))
-            algorithm.neat.genome.visualize(network, save_path=f"results/{timestamp}_lgn/imgs/neat_CPPN_network.svg")
+            algorithm.neat.genome.visualize(network, save_path=f"results/{timestamp}_lgn/imgs/neat_CPPN_network_nofuncs.svg", with_labels=True)
+            algorithm.neat.genome.visualize(network, save_path=f"results/{timestamp}_lgn/imgs/neat_CPPN_network.svg", with_labels=True, with_function_labels=True)
 
             transformed = algorithm.transform(state, best)
             seqs, h_nodes, h_conns, u_conns = transformed
             hyper_network = algorithm.hyper_genome.network_dict(state, h_nodes, h_conns)
             print(algorithm.hyper_genome.repr(state, h_nodes, h_conns))
-            algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network.svg")
+            algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network_nofuncs.svg", with_labels=True)
+            algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network.svg", with_labels=True, with_function_labels=True)
 
     

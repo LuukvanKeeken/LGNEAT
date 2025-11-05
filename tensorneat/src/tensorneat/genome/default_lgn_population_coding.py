@@ -21,6 +21,25 @@ from tensorneat.src.tensorneat.common import (
     AGG,
 )
 
+LABELS = {
+    0: "nand",
+    1: "nor",
+    2: "and",
+    3: "or",
+    4: "false",
+    5: "a & !b",
+    6: "a",
+    7: "xor",
+    8: "xnor",
+    9: "!a",
+    10: "a | !b",
+    11: "true",
+    12: "!a & b",
+    13: "b",
+    14: "!b",
+    15: "!a | b",
+}
+
 
 class DefaultGenomeLGNPopulationCoding(DefaultGenome):
     """Default genome class, with the same behavior as the NEAT-Python"""
@@ -149,6 +168,7 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
         edge_color=(0.3, 0.3, 0.3),
         save_path="network.svg",
         save_dpi=800,
+        with_function_labels=False,
         **kwargs,
     ):
         import networkx as nx
@@ -190,46 +210,62 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
         if not isinstance(color, tuple):
             color = (color, color, color)
 
+        labels = {}
+
         for node in topo_order:
             if node in input_idx:
+                if with_labels:
+                    labels[node] = network["nodes"][node].get("idx")
+
                 G.add_node(node, subset=node2layer[node], size=size[0], color=color[0])
             elif node in output_idx:
-                G.add_node(node, subset=node2layer[node], size=size[2], color=color[2])
+                if with_labels:
+                    if with_function_labels:
+                        labels[node] = f"{network['nodes'][node].get('idx')}\n{LABELS.get(network['nodes'][node].get('act_func_idx'), 'unknown')}"
+                    else:
+                        labels[node] = f"{network['nodes'][node].get('idx')}"
+                G.add_node(node, subset=node2layer[node], size=size[2], color=color[2] if not with_labels else "gray")
             else:
                 # Colour the hidden nodes based on their activation function
                 if network["nodes"][node].get("idx") == node:
+                    if with_labels:
+                        if with_function_labels:
+                            labels[node] = f"{network['nodes'][node].get('idx')}\n{LABELS.get(network['nodes'][node].get('act_func_idx'), 'unknown')}"
+                        else:
+                            labels[node] = f"{network['nodes'][node].get('idx')}"
+
                     if network["nodes"][node].get("act_func_idx") == 0: # nand
                         G.add_node(node, subset=node2layer[node], size=size[1], color="white")
                     elif network["nodes"][node].get("act_func_idx") == 1: # nor
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="gray")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="gray" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 2: # and
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="green")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="green" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 3: # or
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="red")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="red" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 4: # false
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="black")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="black" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 5: # a_and_not_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="purple")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="purple" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 6: # a
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="orange")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="orange" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 7: # xor
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="pink")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="pink" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 8: # xnor
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="cyan")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="cyan" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 9: # not_a
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="brown")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="brown" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 10: # a_or_not_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="magenta")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="magenta" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 11: # true
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgray")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgray" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 12: # not_a_and_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgreen")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightgreen" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 13: # b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightblue")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightblue" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 14: # not_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightcoral")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightcoral" if not with_function_labels else "white")
                     elif network["nodes"][node].get("act_func_idx") == 15: # not_a_or_b
-                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightyellow")
+                        G.add_node(node, subset=node2layer[node], size=size[1], color="lightyellow" if not with_function_labels else "white")
                 else:
                     raise ValueError("Node idx does not match the key in network['nodes']")
 
@@ -256,6 +292,11 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
         node_sizes = [n["size"] for n in G.nodes.values()]
         node_colors = [n["color"] for n in G.nodes.values()]
 
+        font_size = None
+        if with_labels:
+            font_size = 8
+            if with_function_labels:
+                font_size = 6
 
         nx.draw(
             G,
@@ -266,7 +307,9 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
             edgecolors=edgecolors,
             arrowstyle=arrowstyle,
             arrowsize=arrowsize,
-            edge_color=edge_color
+            edge_color=edge_color,
+            labels=labels if with_labels else None,
+            font_size=font_size,
         )
         plt.savefig(save_path, dpi=save_dpi)
         plt.close()
