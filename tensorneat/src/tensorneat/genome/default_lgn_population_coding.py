@@ -169,6 +169,7 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
         save_path="network.svg",
         save_dpi=800,
         with_function_labels=False,
+        make_compact=True,
         **kwargs,
     ):
         import networkx as nx
@@ -185,19 +186,25 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
 
         # reorder nodes in each layer to make them more compact
         subset_key = {}
-        for layer, nodes in enumerate(topo_layers):
-            if layer == 0 or len(nodes) == 1:
+        if make_compact:
+            
+            for layer, nodes in enumerate(topo_layers):
+                if layer == 0 or len(nodes) == 1:
+                    subset_key[layer] = nodes
+                    continue
+                nodes_y = []
+                for node in nodes:
+                    node_y = 0
+                    for y, last_node in enumerate(topo_layers[layer-1]):
+                        if (last_node, node) in conns_list:
+                            node_y += y
+                    nodes_y.append(node_y)
+                nodes = [node for _, node in sorted(zip(nodes_y, nodes))]
                 subset_key[layer] = nodes
-                continue
-            nodes_y = []
-            for node in nodes:
-                node_y = 0
-                for y, last_node in enumerate(topo_layers[layer-1]):
-                    if (last_node, node) in conns_list:
-                        node_y += y
-                nodes_y.append(node_y)
-            nodes = [node for _, node in sorted(zip(nodes_y, nodes))]
-            subset_key[layer] = nodes
+
+        else:
+            for layer, nodes in enumerate(topo_layers):
+                subset_key[layer] = nodes
 
         if reverse_node_order:
             for layer, nodes in subset_key.items():
