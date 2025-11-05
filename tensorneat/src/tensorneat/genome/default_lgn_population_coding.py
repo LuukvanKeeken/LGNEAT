@@ -224,7 +224,7 @@ class DefaultGenomeLGNPopulationCoding(DefaultGenome):
                         labels[node] = f"{network['nodes'][node].get('idx')}\n{LABELS.get(network['nodes'][node].get('act_func_idx'), 'unknown')}"
                     else:
                         labels[node] = f"{network['nodes'][node].get('idx')}"
-                G.add_node(node, subset=node2layer[node], size=size[2], color=color[2] if not with_labels else "gray")
+                G.add_node(node, subset=node2layer[node], size=size[2], color=color[2] if not (with_labels and with_function_labels) else "gray")
             else:
                 # Colour the hidden nodes based on their activation function
                 if network["nodes"][node].get("idx") == node:
