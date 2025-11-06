@@ -29,6 +29,27 @@ ACTS = {
 }
 
 
+LABELS = {
+    0: "LEO",
+    1: "nand",
+    2: "nor",
+    3: "and",
+    4: "or",
+    5: "false",
+    6: "a & !b",
+    7: "a",
+    8: "xor",
+    9: "xnor",
+    10: "!a",
+    11: "a | !b",
+    12: "true",
+    13: "!a & b",
+    14: "b",
+    15: "!b",
+    16: "!a | b",
+}
+
+
 class DefaultGenomeCPPN(DefaultGenome):
 
     """Default genome class, with the same behavior as the NEAT-Python"""
@@ -133,10 +154,12 @@ class DefaultGenomeCPPN(DefaultGenome):
                 G.add_node(node, subset=node2layer[node], size=size[0], color=color[0])
             elif node in output_idx:
                 if with_labels:
+                    node_idx = network['nodes'][node].get('idx')
+                    node_idx -= min(output_idx)
                     if with_function_labels:
-                        labels[node] = f"{network['nodes'][node].get('idx')}\n{ACTS.get(network['nodes'][node].get('act'), 'unk')[1]}"
+                        labels[node] = f"{LABELS.get(node_idx, 'unk')}\n{ACTS.get(network['nodes'][node].get('act'), 'unk')[1]}"
                     else:
-                        labels[node] = f"{network['nodes'][node].get('idx')}"
+                        labels[node] = f"{LABELS.get(node_idx, 'unk')}"
 
                 G.add_node(node, subset=node2layer[node], size=size[2], color=color[2] if not with_labels else "gray")
             else:
