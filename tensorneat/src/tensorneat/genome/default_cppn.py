@@ -6,7 +6,7 @@ import numpy as np
 import sympy as sp
 
 from .default import DefaultGenome
-from .gene import DefaultNode, DefaultConn
+from .gene import DefaultNode, DefaultConn, OriginNode, OriginConn
 from .operations import DefaultMutation, DefaultCrossover, DefaultDistance
 from .utils import unflatten_conns, extract_gene_attrs, extract_gene_attrs
 
@@ -62,8 +62,8 @@ class DefaultGenomeCPPN(DefaultGenome):
         num_outputs: int,
         max_nodes=50,
         max_conns=100,
-        node_gene=DefaultNode(activation_options=[v[0] for v in ACTS.values()]),
-        conn_gene=DefaultConn(),
+        node_gene=OriginNode(activation_options=[v[0] for v in ACTS.values()]),
+        conn_gene=OriginConn(),
         mutation=DefaultMutation(),
         crossover=DefaultCrossover(),
         distance=DefaultDistance(),
