@@ -32,7 +32,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 if __name__ == "__main__":
 
     all_gen_nums = []
-    num_runs = 10
+    num_runs = 30
     for i in range(num_runs):
 
         layers = [8, 10, 10, 10, 10]
