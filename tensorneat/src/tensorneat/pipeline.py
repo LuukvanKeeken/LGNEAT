@@ -234,18 +234,19 @@ class Pipeline(StatefulBaseClass):
             self.best_fitness = fitnesses[max_idx]
             self.best_genome = pop[0][max_idx], pop[1][max_idx]
 
+            if self.is_save:
+                # save best
+                best_genome = jax.device_get((pop[0][max_idx], pop[1][max_idx]))
+                file_name = os.path.join(self.genome_dir, f"{generation}.npz")
+                with open(file_name, "wb") as f:
+                    np.savez(
+                        f,
+                        nodes=best_genome[0],
+                        conns=best_genome[1],
+                        fitness=self.best_fitness,
+                    )
+                    
         if self.is_save:
-            # save best
-            best_genome = jax.device_get((pop[0][max_idx], pop[1][max_idx]))
-            file_name = os.path.join(self.genome_dir, f"{generation}.npz")
-            with open(file_name, "wb") as f:
-                np.savez(
-                    f,
-                    nodes=best_genome[0],
-                    conns=best_genome[1],
-                    fitness=self.best_fitness,
-                )
-
             # append log
             with open(os.path.join(self.save_dir, "log.txt"), "a") as f:
                 f.write(f"{generation},{max_f},{min_f},{mean_f},{std_f},{cost_time}\n")
