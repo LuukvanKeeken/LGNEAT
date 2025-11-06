@@ -186,5 +186,5 @@ if __name__ == "__main__":
     plt.ylabel("Fitness")
     plt.title("Fitness Progression")
     plt.legend()
-    plt.savefig(f"results/{timestamp}_lgn/fitness_progression.png")
+    plt.savefig(f"results/{timestamp}_lgn/imgs/fitness_progression.png")
     plt.close()
