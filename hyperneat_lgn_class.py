@@ -6,6 +6,8 @@ from tensorneat.src.tensorneat.genome import DefaultGenomeCPPN
 from tensorneat.src.tensorneat.common import ACT
 import jax.numpy as jnp
 from tensorneat.src.tensorneat.problem.func_fit import CustomFuncFit
+import matplotlib.pyplot as plt
+import numpy as np
 
 import time
 import os
@@ -29,7 +31,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 
 if __name__ == "__main__":
 
-    layers = [8, 4, 4, 10]
+    layers = [8, 10, 10, 10, 10, 10]
 
     neat_inputs = 4
     neat_outputs = 17
@@ -40,7 +42,7 @@ if __name__ == "__main__":
                 layers=layers,
             ),
             neat=NEAT(
-                pop_size=10,
+                pop_size=1000,
                 species_size=20,
                 survival_threshold=0.01,
                 species_elitism=1,
@@ -77,9 +79,11 @@ if __name__ == "__main__":
     pipeline = Pipeline(
         algorithm=algorithm,
         problem=even_problem,
-        fitness_target=-0.32,
-        generation_limit=1,
-        seed=4
+        fitness_target=-0.007,
+        generation_limit=10000,
+        seed=4,
+        is_save=True,
+        save_dir=f"results/{timestamp}_lgn",
     )
 
 
@@ -108,7 +112,7 @@ if __name__ == "__main__":
 
 
     print("Starting training ...")
-    with open(f"results/{timestamp}_lgn/log.txt", "w") as f_log:
+    with open(f"results/{timestamp}_lgn/log_prints.txt", "w") as f_log:
         with contextlib.redirect_stdout(f_log):
 
             # initialize state
@@ -162,3 +166,25 @@ if __name__ == "__main__":
             algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network_nofuncs.svg", with_labels=True, make_compact=False)
             algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network.svg", with_labels=True, with_function_labels=True, make_compact=False)
     
+
+    # Plot the progression of the max and meand/std fitness over generations
+    # The data is in results/timestamp/log.txt, with the relevant data in 
+    # the second (max), fourth (mean) and fifth (std) columns. The first
+    # line is a header.
+    log_data = np.genfromtxt(f"results/{timestamp}_lgn/log.txt", skip_header=1, delimiter=',')
+    generations = log_data[:, 0]
+    max_fitness = log_data[:, 1]
+    mean_fitness = log_data[:, 3]
+    std_fitness = log_data[:, 4]
+
+    # Plot the results
+    plt.figure(figsize=(12, 6))
+    plt.plot(generations, max_fitness, label="Max Fitness")
+    plt.plot(generations, mean_fitness, label="Mean Fitness")
+    plt.fill_between(generations, mean_fitness - std_fitness, mean_fitness + std_fitness, alpha=0.2, label="Std Fitness")
+    plt.xlabel("Generations")
+    plt.ylabel("Fitness")
+    plt.title("Fitness Progression")
+    plt.legend()
+    plt.savefig(f"results/{timestamp}_lgn/fitness_progression.png")
+    plt.close()
