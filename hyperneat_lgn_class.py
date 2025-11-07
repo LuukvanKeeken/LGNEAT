@@ -32,6 +32,8 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 if __name__ == "__main__":
 
     all_gen_nums = []
+    all_max_fit = []
+    all_mean_fit = []
     num_runs = 50
     for i in range(num_runs):
 
@@ -198,10 +200,24 @@ if __name__ == "__main__":
 
         avg_gens = sum(all_gen_nums)/len(all_gen_nums)
         stddev_gens = np.std(np.array(all_gen_nums))
+        all_max_fit.append(max_fitness[-1])
+        all_mean_fit.append(mean_fitness[-1])
+        avg_max_fit = sum(all_max_fit)/len(all_max_fit)
+        avg_mean_fit = sum(all_mean_fit)/len(all_mean_fit)
+        stddev_max_fit = np.std(np.array(all_max_fit))
+        stddev_mean_fit = np.std(np.array(all_mean_fit))
         print(f"Average generations over {i+1} runs: {avg_gens}+/-{stddev_gens}")
         print(f"All generation counts: {all_gen_nums}")
+        print(f"Average max fitness over {i+1} runs: {avg_max_fit}+/-{stddev_max_fit}")
+        print(f"All max fitnesses: {all_max_fit}")
+        print(f"Average mean fitness over {i+1} runs: {avg_mean_fit}+/-{stddev_mean_fit}")
+        print(f"All mean fitnesses: {all_mean_fit}")
         with open(f"results/{timestamp}_lgn/avg_gens.txt", "w") as f_avg:
             f_avg.write(f"Average generations over {i+1} runs: {avg_gens}+/-{stddev_gens}\n")
             f_avg.write(f"All generation counts: {all_gen_nums}\n")
+            f_avg.write(f"Average max fitness over {i+1} runs: {avg_max_fit}+/-{stddev_max_fit}\n")
+            f_avg.write(f"All max fitnesses: {all_max_fit}\n")
+            f_avg.write(f"Average mean fitness over {i+1} runs: {avg_mean_fit}+/-{stddev_mean_fit}\n")
+            f_avg.write(f"All mean fitnesses: {all_mean_fit}\n")
 
     
