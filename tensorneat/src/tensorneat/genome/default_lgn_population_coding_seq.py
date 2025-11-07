@@ -101,7 +101,7 @@ class DefaultGenomeLGNPopulationCodingSeq(DefaultGenome):
         assert self.num_outputs % self.num_classes == 0, "num_outputs must be divisible by num_classes"
 
 
-    def forward(self, state, transformed, inputs):
+    def forward_one_row(self, state, transformed, inputs):
 
         if self.input_transform is not None:
             inputs = self.input_transform(inputs)
@@ -158,7 +158,13 @@ class DefaultGenomeLGNPopulationCodingSeq(DefaultGenome):
 
         output_vals = vals[self.output_idx]
 
-        # Group output_vals into self.num_classes groups and sum within each group
+        return output_vals
+
+    def forward(self, state, transformed, inputs):
+
+        row_outputs = jax.vmap(lambda row: self.forward_one_row(state, transformed, row))(inputs)
+
+        output_vals = jnp.sum(row_outputs, axis=0)
         output_vals = output_vals.reshape((self.num_classes, -1)).sum(axis=1)
 
 

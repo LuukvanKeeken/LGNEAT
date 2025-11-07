@@ -214,12 +214,14 @@ class CustomFuncFit(FuncFit):
         msg = ""
         msg += "Training Data:\n"
         for i in range(inputs[self.train_idx].shape[0]):
-            msg += f"input: {inputs[self.train_idx][i]}, target: {target[self.train_idx][i]}, predict: {predict[self.train_idx][i]} {predict_bin[self.train_idx][i]}\n"
+            msg += f"target: {target[self.train_idx][i]}, predict: {predict[self.train_idx][i]} {predict_bin[self.train_idx][i]}\n"
+            # msg += f"input: {inputs[self.train_idx][i]}, target: {target[self.train_idx][i]}, predict: {predict[self.train_idx][i]} {predict_bin[self.train_idx][i]}\n"
         msg += f"loss: {loss_train}\n"
         msg += f"accuracy: {accuracy_train}\n\n"
         msg += "Testing Data:\n"
         for i in range(inputs[self.test_idx].shape[0]):
-            msg += f"input: {inputs[self.test_idx][i]}, target: {target[self.test_idx][i]}, predict: {predict[self.test_idx][i]} {predict_bin[self.test_idx][i]}\n"
+            msg += f"target: {target[self.test_idx][i]}, predict: {predict[self.test_idx][i]} {predict_bin[self.test_idx][i]}\n"
+            # msg += f"input: {inputs[self.test_idx][i]}, target: {target[self.test_idx][i]}, predict: {predict[self.test_idx][i]} {predict_bin[self.test_idx][i]}\n"
         msg += f"loss: {loss_test}\n"
         msg += f"accuracy: {accuracy_test}\n"
         print(msg)

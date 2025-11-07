@@ -111,7 +111,7 @@ if __name__ == "__main__":
                     layers=layers,
                 ),
                 neat=NEAT(
-                    pop_size=10,
+                    pop_size=1000,
                     species_size=20,
                     survival_threshold=0.01,
                     species_elitism=1,
@@ -128,12 +128,7 @@ if __name__ == "__main__":
         
 
 
-        # Inputs is a vector of ones and zeros. Count the number
-        # of ones, and return 1 if that number is even, otherwise 0
-        # def even_ones(inputs):
-        #     count_ones = jnp.sum(inputs)
-        #     return jnp.where(count_ones % 2 == 0, jnp.array([1, 0]), jnp.array([0, 1]))
-
+      
 
         mnist = CustomFuncFit(
             func = None,
@@ -151,7 +146,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.007,
-            generation_limit=1,
+            generation_limit=1000,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
@@ -220,7 +215,7 @@ if __name__ == "__main__":
 
                 start_time_test = time.time()
                 # show result
-                pipeline.show(state, best)
+                pipeline.show(state, best, leave_out_input=True)
                 print(f"Testing time: {time.time() - start_time_test} seconds\n")
 
                 # visualize the best individual

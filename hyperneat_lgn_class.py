@@ -34,7 +34,7 @@ if __name__ == "__main__":
     all_gen_nums = []
     all_max_fit = []
     all_mean_fit = []
-    num_runs = 40
+    num_runs = 1
     for i in range(num_runs):
 
         layers = [8, 10, 10, 10, 10]
@@ -48,7 +48,7 @@ if __name__ == "__main__":
                     layers=layers,
                 ),
                 neat=NEAT(
-                    pop_size=1000,
+                    pop_size=10,
                     species_size=20,
                     survival_threshold=0.01,
                     species_elitism=1,
@@ -86,7 +86,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=even_problem,
             fitness_target=-0.007,
-            generation_limit=20000,
+            generation_limit=1,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
