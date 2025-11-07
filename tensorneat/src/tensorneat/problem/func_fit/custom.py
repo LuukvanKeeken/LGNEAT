@@ -18,6 +18,8 @@ class CustomFuncFit(FuncFit):
         step_size: Array = None,
         train_test_split: float = 0.8,
         split_seed: int = 42,
+        input_data: Array = None,
+        output_data: Array = None,
         *args,
         **kwargs,
     ):
@@ -27,13 +29,21 @@ class CustomFuncFit(FuncFit):
         if isinstance(upper_bounds, list) or isinstance(upper_bounds, tuple):
             upper_bounds = np.array(upper_bounds, dtype=np.float32)
 
-        try:
-            out = func(low_bounds)
-        except Exception as e:
-            raise ValueError(f"func(low_bounds) raise an exception: {e}")
-        assert low_bounds.shape == upper_bounds.shape
+        assert method in {"sample", "grid", "set_direct"}, "Unknown method"
 
-        assert method in {"sample", "grid"}
+        if method != "set_direct":
+            try:
+                out = func(low_bounds)
+            except Exception as e:
+                raise ValueError(f"func(low_bounds) raise an exception: {e}")
+            assert low_bounds.shape == upper_bounds.shape
+
+        
+
+        if method == "set_direct":
+            assert input_data is not None and output_data is not None, "input_data and output_data must be provided when method is 'set_direct'"
+            self.data_inputs = jnp.array(input_data)
+            self.data_outputs = jnp.array(output_data)
 
         self.func = func
         self.low_bounds = low_bounds
@@ -66,6 +76,11 @@ class CustomFuncFit(FuncFit):
                     high=self.upper_bounds[i],
                     size=(self.num_samples,),
                 )
+
+            outputs = vmap(self.func)(inputs)
+
+            self.data_inputs = jnp.array(inputs)
+            self.data_outputs = jnp.array(outputs)
         elif self.method == "grid":
             assert (
                 self.step_size is not None
@@ -82,13 +97,17 @@ class CustomFuncFit(FuncFit):
                 )
                 inputs = cartesian_product(inputs, new_col[:, None])
             inputs = inputs[:, 1:]
+
+            outputs = vmap(self.func)(inputs)
+
+            self.data_inputs = jnp.array(inputs)
+            self.data_outputs = jnp.array(outputs)
+        elif self.method == "set_direct":
+            pass
         else:
             raise ValueError(f"Unknown method: {self.method}")
 
-        outputs = vmap(self.func)(inputs)
-
-        self.data_inputs = jnp.array(inputs)
-        self.data_outputs = jnp.array(outputs)
+        
 
         # Create train/test split
         rng_state = np.random.get_state()

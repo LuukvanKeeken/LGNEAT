@@ -60,7 +60,7 @@ COLOURS = {
 }
 
 
-class DefaultGenomeLGNPopulationCoding(DefaultGenome):
+class DefaultGenomeLGNPopulationCodingSeq(DefaultGenome):
     """Default genome class, with the same behavior as the NEAT-Python"""
 
     network_type = "feedforward"

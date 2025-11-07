@@ -8,3 +8,4 @@ from .default_cppn import DefaultGenomeCPPN
 from .default_softmax import DefaultGenomeSoftmax
 from .default_population_coding import DefaultGenomePopulationCoding
 from .default_lgn_population_coding import DefaultGenomeLGNPopulationCoding
+from .default_lgn_population_coding_seq import DefaultGenomeLGNPopulationCodingSeq
