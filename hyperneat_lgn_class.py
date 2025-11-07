@@ -32,7 +32,7 @@ if not os.path.exists(f"results/{timestamp}_lgn/imgs"):
 if __name__ == "__main__":
 
     all_gen_nums = []
-    num_runs = 30
+    num_runs = 50
     for i in range(num_runs):
 
         layers = [8, 10, 10, 10, 10]
@@ -171,6 +171,8 @@ if __name__ == "__main__":
                 algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network_nofuncs.svg", with_labels=True, make_compact=False)
                 algorithm.hyper_genome.visualize(hyper_network, save_path=f"results/{timestamp}_lgn/imgs/hyperneat_network.svg", with_labels=True, with_function_labels=True, make_compact=False)
         
+        del pipeline, algorithm
+
 
         # Plot the progression of the max and meand/std fitness over generations
         # The data is in results/timestamp/log.txt, with the relevant data in 
@@ -194,12 +196,12 @@ if __name__ == "__main__":
         plt.savefig(f"results/{timestamp}_lgn/imgs/fitness_progression.png")
         plt.close()
 
-    avg_gens = sum(all_gen_nums)/len(all_gen_nums)
-    stddev_gens = np.std(np.array(all_gen_nums))
-    print(f"Average generations over {num_runs} runs: {avg_gens}+/-{stddev_gens}")
-    print(f"All generation counts: {all_gen_nums}")
-    with open(f"results/{timestamp}_lgn/avg_gens.txt", "w") as f_avg:
-        f_avg.write(f"Average generations over {num_runs} runs: {avg_gens}+/-{stddev_gens}\n")
-        f_avg.write(f"All generation counts: {all_gen_nums}\n")
+        avg_gens = sum(all_gen_nums)/len(all_gen_nums)
+        stddev_gens = np.std(np.array(all_gen_nums))
+        print(f"Average generations over {i+1} runs: {avg_gens}+/-{stddev_gens}")
+        print(f"All generation counts: {all_gen_nums}")
+        with open(f"results/{timestamp}_lgn/avg_gens.txt", "w") as f_avg:
+            f_avg.write(f"Average generations over {i+1} runs: {avg_gens}+/-{stddev_gens}\n")
+            f_avg.write(f"All generation counts: {all_gen_nums}\n")
 
     
