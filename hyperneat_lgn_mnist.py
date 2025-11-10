@@ -39,8 +39,8 @@ if not os.path.exists(f"datasets/MNIST"):
     torchvision.datasets.MNIST("datasets", download=True)
 
 include_classes = [9, 5, 7]
-num_train_per_class = 50
-num_test_per_class = 50
+num_train_per_class = 25
+num_test_per_class = 25
 train_set = torchvision.datasets.MNIST("datasets", train=True)
 test_set = torchvision.datasets.MNIST("datasets", train=False)
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=10,
+            generation_limit=20,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
