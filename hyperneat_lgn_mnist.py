@@ -100,7 +100,7 @@ if __name__ == "__main__":
     num_runs = 1
     for i in range(num_runs):
 
-        layers = [28, 5, 5, 6]
+        layers = [28, 12]
 
         neat_inputs = 4
         neat_outputs = 17
