@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
         neat_inputs = 4
         neat_outputs = 17
-        neat_hidden_layers = ()
+        neat_hidden_layers = (4,)
 
         algorithm=HyperNEATFeedForwardLGNClassSeq(
                 substrate=LGNSubstrateLEO(
@@ -115,6 +115,7 @@ if __name__ == "__main__":
                     species_size=20,
                     survival_threshold=0.01,
                     species_elitism=1,
+                    compatibility_threshold=1.0,
                     genome=DefaultGenomeCPPN(
                         num_inputs=neat_inputs,  # size of query coors
                         num_outputs=neat_outputs,
@@ -146,7 +147,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=100000,
+            generation_limit=10000,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
