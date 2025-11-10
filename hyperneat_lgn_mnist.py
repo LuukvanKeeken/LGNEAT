@@ -100,7 +100,7 @@ if __name__ == "__main__":
     num_runs = 1
     for i in range(num_runs):
 
-        layers = [28, 20, 10, 10, 15]
+        layers = [28, 10, 10, 12]
 
         neat_inputs = 4
         neat_outputs = 17
@@ -111,7 +111,7 @@ if __name__ == "__main__":
                     layers=layers,
                 ),
                 neat=NEAT(
-                    pop_size=500,
+                    pop_size=1000,
                     species_size=20,
                     survival_threshold=0.01,
                     species_elitism=1,
@@ -178,6 +178,7 @@ if __name__ == "__main__":
 
 
         print("Starting training ...")
+        start_train_time = time.time()
         with open(f"results/{timestamp}_lgn/log_prints.txt", "w") as f_log:
             with contextlib.redirect_stdout(f_log):
 
@@ -211,7 +212,7 @@ if __name__ == "__main__":
                             completed_generations = int(first_line.split("/")[0].split(" ")[1])
                 all_gen_nums.append(completed_generations)
 
-                print(f"Approximate time/generation: {(time.time() - start_time)/completed_generations:.2f} seconds\n")
+                print(f"Approximate time/generation: {(time.time() - start_train_time)/completed_generations:.2f} seconds\n")
 
                 start_time_test = time.time()
                 # show result
