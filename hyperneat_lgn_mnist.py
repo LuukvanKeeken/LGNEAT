@@ -149,7 +149,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=10000,
+            generation_limit=100000,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
