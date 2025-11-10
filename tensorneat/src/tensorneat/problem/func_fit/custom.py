@@ -183,13 +183,26 @@ class CustomFuncFit(FuncFit):
         return -loss
     
 
-    def evaluate_threshold(self, state, randkey, act_func, params, threshold=0.5, train = True):
+    # def evaluate_threshold(self, state, randkey, act_func, params, threshold=0.5, train = True):
+    #     predict = vmap(act_func, in_axes=(None, None, 0))(
+    #         state, params, self.inputs[self.train_idx if train else self.test_idx]
+    #     )
+    #     predict = (predict >= threshold).astype(jnp.float32)
+
+    #     accuracy = jnp.mean(predict == self.targets[self.train_idx if train else self.test_idx])
+    #     return accuracy
+    
+
+    def evaluate_accuracy(self, state, randkey, act_func, params, train = True):
         predict = vmap(act_func, in_axes=(None, None, 0))(
             state, params, self.inputs[self.train_idx if train else self.test_idx]
         )
-        predict = (predict >= threshold).astype(jnp.float32)
+        
+        # Compare prediction and target by argmax
+        predict = jnp.argmax(predict, axis=-1)
+        targets = jnp.argmax(self.targets[self.train_idx if train else self.test_idx], axis=-1)
 
-        accuracy = jnp.mean(predict == self.targets[self.train_idx if train else self.test_idx])
+        accuracy = jnp.mean(predict == targets)
         return accuracy
 
 
@@ -200,13 +213,15 @@ class CustomFuncFit(FuncFit):
         )
         inputs, target, predict = jax.device_get([self.inputs, self.targets, predict])
 
-        # Binarize predictions
-        predict_bin = (predict >= 0.5).astype(jnp.float32)
+        # Turn prediction vectors into one-hot encoded vectors
+        predict_bin = jnp.zeros_like(predict)
+        predict_indices = jnp.argmax(predict, axis=-1)
+        predict_bin = predict_bin.at[jnp.arange(predict.shape[0]), predict_indices].set(1)
 
         fitness_train = self.evaluate(state, randkey, act_func, params, train=True)
         fitness_test = self.evaluate(state, randkey, act_func, params, train=False)
-        accuracy_train = self.evaluate_threshold(state, randkey, act_func, params, train=True)
-        accuracy_test = self.evaluate_threshold(state, randkey, act_func, params, train=False)
+        accuracy_train = self.evaluate_accuracy(state, randkey, act_func, params, train=True)
+        accuracy_test = self.evaluate_accuracy(state, randkey, act_func, params, train=False)
 
         loss_train = -fitness_train
         loss_test = -fitness_test
