@@ -39,8 +39,8 @@ if not os.path.exists(f"datasets/MNIST"):
     torchvision.datasets.MNIST("datasets", download=True)
 
 include_classes = [9, 5, 7]
-num_train_per_class = 25
-num_test_per_class = 25
+num_train_per_class = 50
+num_test_per_class = 50
 train_set = torchvision.datasets.MNIST("datasets", train=True)
 test_set = torchvision.datasets.MNIST("datasets", train=False)
 
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     num_runs = 1
     for i in range(num_runs):
 
-        layers = [28, 10, 10, 12]
+        layers = [28, 5, 5, 6]
 
         neat_inputs = 4
         neat_outputs = 17
