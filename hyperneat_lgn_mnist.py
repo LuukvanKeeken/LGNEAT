@@ -49,7 +49,7 @@ def pil_to_jax_array_and_binarize(pil_img):
     np_img = np.array(pil_img, dtype=np.float32)
     # Now binarize the image: pixels > 127 become 1, else 0
     np_img = (np_img > 127).astype(np.float32)
-    np_img = np_img[:20, :20]  # Keep only the first 14 rows
+    np_img = np_img[:7, :]  # Keep only the first 14 rows
     return jnp.array(np_img)
 
 def label_to_one_hot(label):
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     num_runs = 1
     for i in range(num_runs):
 
-        layers = [20, 10, 10, 12]
+        layers = [28, 10, 10, 12]
 
         neat_inputs = 4
         neat_outputs = 17
