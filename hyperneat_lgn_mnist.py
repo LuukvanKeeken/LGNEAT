@@ -111,7 +111,7 @@ if __name__ == "__main__":
                     layers=layers,
                 ),
                 neat=NEAT(
-                    pop_size=500,
+                    pop_size=1000,
                     species_size=20,
                     survival_threshold=0.01,
                     species_elitism=1,
@@ -146,7 +146,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=20,
+            generation_limit=10,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
