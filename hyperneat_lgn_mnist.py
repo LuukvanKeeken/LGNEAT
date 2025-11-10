@@ -3,6 +3,7 @@ from tensorneat.src.tensorneat.algorithm.neat import NEAT
 from tensorneat.src.tensorneat.algorithm.hyperneat import LGNSubstrateLEO
 from tensorneat.src.tensorneat.algorithm.hyperneat import HyperNEATFeedForwardLGNClassSeq
 from tensorneat.src.tensorneat.genome import DefaultGenomeCPPN
+from tensorneat.src.tensorneat.genome.operations import DefaultMutation
 from tensorneat.src.tensorneat.common import ACT
 import jax.numpy as jnp
 from tensorneat.src.tensorneat.problem.func_fit import CustomFuncFit
@@ -115,12 +116,13 @@ if __name__ == "__main__":
                     species_size=20,
                     survival_threshold=0.01,
                     species_elitism=1,
-                    compatibility_threshold=1.0,
+                    compatibility_threshold=2.0,
                     genome=DefaultGenomeCPPN(
                         num_inputs=neat_inputs,  # size of query coors
                         num_outputs=neat_outputs,
                         init_hidden_layers=neat_hidden_layers,
                         output_transform=ACT.identity,
+                        mutation=DefaultMutation(conn_delete=0.0, node_delete=0.0),
                     ),
                 ),
                 activation=ACT.nand,
@@ -147,7 +149,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=100000,
+            generation_limit=10000,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
