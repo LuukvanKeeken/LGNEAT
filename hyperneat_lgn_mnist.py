@@ -101,7 +101,7 @@ if __name__ == "__main__":
     num_runs = 1
     for i in range(num_runs):
 
-        layers = [28, 30, 20, 10, 10]
+        layers = [28, 30, 30, 20, 10]
 
         neat_inputs = 4
         neat_outputs = 17
@@ -149,7 +149,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=100000,
+            generation_limit=100,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
