@@ -176,7 +176,7 @@ if __name__ == "__main__":
             f_settings.write(f"Train/test split: {pipeline.problem.train_test_split}\n")
             f_settings.write(f"Split seed: {pipeline.problem.split_seed}\n")
             f_settings.write(f"Compatibility threshold: {algorithm.neat.species_controller.compatibility_threshold}\n")
-
+            f_settings.write(f"Num train items per class: {num_train_per_class}\n")
 
 
 
