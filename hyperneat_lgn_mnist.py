@@ -114,15 +114,15 @@ if __name__ == "__main__":
                 neat=NEAT(
                     pop_size=1000,
                     species_size=20,
-                    survival_threshold=0.01,
+                    survival_threshold=0.1,
                     species_elitism=1,
-                    compatibility_threshold=2.0,
+                    compatibility_threshold=1.0,
                     genome=DefaultGenomeCPPN(
                         num_inputs=neat_inputs,  # size of query coors
                         num_outputs=neat_outputs,
                         init_hidden_layers=neat_hidden_layers,
                         output_transform=ACT.identity,
-                        mutation=DefaultMutation(conn_delete=0.0, node_delete=0.0),
+                        mutation=DefaultMutation(),
                     ),
                 ),
                 activation=ACT.nand,
@@ -149,7 +149,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=100000,
+            generation_limit=100,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
