@@ -40,7 +40,7 @@ if not os.path.exists(f"datasets/MNIST"):
     torchvision.datasets.MNIST("datasets", download=True)
 
 include_classes = [9, 5]
-num_train_per_class = 50
+num_train_per_class = 100
 num_test_per_class = 50
 train_set = torchvision.datasets.MNIST("datasets", train=True)
 test_set = torchvision.datasets.MNIST("datasets", train=False)
