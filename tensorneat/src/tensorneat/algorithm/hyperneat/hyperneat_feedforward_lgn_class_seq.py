@@ -34,7 +34,7 @@ class HyperNEATFeedForwardLGNClassSeq(HyperNEAT):
         self.hyper_genome = DefaultGenomeLGNPopulationCodingSeq(
             num_inputs=substrate.num_inputs,
             num_outputs=substrate.num_outputs,
-            num_classes=3,
+            num_classes=2,
             max_nodes=substrate.nodes_cnt,
             max_conns=substrate.conns_cnt,
             node_gene=HyperNEATLGNNode(activation_default=activation),
