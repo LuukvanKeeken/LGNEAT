@@ -15,7 +15,19 @@ import time
 import os
 import contextlib
 
+import argparse
+
 start_time = time.time()
+
+# Use argparse to get command line arguments
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--single_class", type=int, default=2)
+args = parser.parse_args()
+
+single_class = args.single_class
+
 
 # Check if results directory exists, if not, create it
 if not os.path.exists("results"):
@@ -39,7 +51,7 @@ if not os.path.exists("datasets"):
 if not os.path.exists(f"datasets/MNIST"):
     torchvision.datasets.MNIST("datasets", download=True)
 
-single_class = 2
+
 num_train_per_class = 100
 num_test_per_class = 50
 train_set = torchvision.datasets.MNIST("datasets", train=True)
@@ -97,13 +109,13 @@ for img, label in test_set:
         break
 
 # Make some quick plots of the first 5 train images
-# plt.figure(figsize=(10, 2))
-# for i in range(10):
-#     plt.subplot(1, 10, i + 1)
-#     plt.imshow(train_images[i], cmap="gray")
-#     plt.title(f"Label: {train_labels[i]}")
-#     plt.axis("off")
-# plt.savefig(f"results/{timestamp}_lgn/imgs/sample_train_images.png")
+plt.figure(figsize=(10, 2))
+for i in range(10):
+    plt.subplot(1, 10, i + 1)
+    plt.imshow(train_images[i], cmap="gray")
+    plt.title(f"Label: {train_labels[i]}")
+    plt.axis("off")
+plt.savefig(f"results/{timestamp}_lgn/imgs/sample_train_images.png")
 
 if __name__ == "__main__":
 
