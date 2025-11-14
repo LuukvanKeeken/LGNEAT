@@ -4,6 +4,7 @@ import jax
 from jax import vmap, numpy as jnp
 import numpy as np
 
+from .species_roulette import SpeciesControllerRoulette
 from .species import SpeciesController
 from .. import BaseAlgorithm
 from tensorneat.src.tensorneat.common import State
@@ -34,7 +35,7 @@ class NEAT(BaseAlgorithm):
 
         self.genome = genome
         self.pop_size = pop_size
-        self.species_controller = SpeciesController(
+        self.species_controller = SpeciesControllerRoulette(
             pop_size,
             species_size,
             max_stagnation,
