@@ -202,6 +202,7 @@ if __name__ == "__main__":
             f_settings.write(f"Compatibility threshold: {algorithm.neat.species_controller.compatibility_threshold}\n")
             f_settings.write(f"Num train items per class: {num_train_per_class}\n")
             f_settings.write(f"Single class: {single_class}\n")
+            f_settings.write(f"Species selection method: {algorithm.neat.species_selection_method}\n")
 
 
 
