@@ -40,7 +40,7 @@ if not os.path.exists(f"datasets/MNIST"):
     torchvision.datasets.MNIST("datasets", download=True)
 
 single_class = 2
-num_train_per_class = 50
+num_train_per_class = 100
 num_test_per_class = 50
 train_set = torchvision.datasets.MNIST("datasets", train=True)
 test_set = torchvision.datasets.MNIST("datasets", train=False)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     num_runs = 1
     for i in range(num_runs):
 
-        layers = [28, 30, 10, 10, 10]
+        layers = [28, 50, 30, 20, 10]
 
         neat_inputs = 4
         neat_outputs = 17
@@ -161,7 +161,7 @@ if __name__ == "__main__":
             algorithm=algorithm,
             problem=mnist,
             fitness_target=-0.02,
-            generation_limit=10000,
+            generation_limit=200000,
             seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
