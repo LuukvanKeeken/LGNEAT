@@ -26,6 +26,7 @@ class NEAT(BaseAlgorithm):
         compatibility_threshold: float = 2.0,
         species_fitness_func: Callable = jnp.max,
         species_number_calculate_by: str = "rank",
+        species_selection_method: str = "roulette",
     ):
 
         assert species_number_calculate_by in [
@@ -33,21 +34,44 @@ class NEAT(BaseAlgorithm):
             "fitness",
         ], "species_number_calculate_by should be either 'rank' or 'fitness'"
 
+        assert species_selection_method in [
+            "roulette",
+            "uniform",
+        ], "species_selection_method should be either 'roulette' or 'uniform'"
+
         self.genome = genome
         self.pop_size = pop_size
-        self.species_controller = SpeciesControllerRoulette(
-            pop_size,
-            species_size,
-            max_stagnation,
-            species_elitism,
-            spawn_number_change_rate,
-            genome_elitism,
-            survival_threshold,
-            min_species_size,
-            compatibility_threshold,
-            species_fitness_func,
-            species_number_calculate_by,
-        )
+
+        self.species_selection_method = species_selection_method
+
+        if species_selection_method == "uniform":
+            self.species_controller = SpeciesController(
+                pop_size,
+                species_size,
+                max_stagnation,
+                species_elitism,
+                spawn_number_change_rate,
+                genome_elitism,
+                survival_threshold,
+                min_species_size,
+                compatibility_threshold,
+                species_fitness_func,
+                species_number_calculate_by,
+            )
+        elif species_selection_method == "roulette":
+            self.species_controller = SpeciesControllerRoulette(
+                pop_size,
+                species_size,
+                max_stagnation,
+                species_elitism,
+                spawn_number_change_rate,
+                genome_elitism,
+                survival_threshold,
+                min_species_size,
+                compatibility_threshold,
+                species_fitness_func,
+                species_number_calculate_by,
+            )
 
     def setup(self, state=State()):
         # setup state
