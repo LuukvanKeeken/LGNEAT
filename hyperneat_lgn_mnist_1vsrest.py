@@ -109,13 +109,13 @@ for img, label in test_set:
         break
 
 # Make some quick plots of the first 5 train images
-plt.figure(figsize=(10, 2))
-for i in range(10):
-    plt.subplot(1, 10, i + 1)
-    plt.imshow(train_images[i], cmap="gray")
-    plt.title(f"Label: {train_labels[i]}")
-    plt.axis("off")
-plt.savefig(f"results/{timestamp}_lgn/imgs/sample_train_images.png")
+# plt.figure(figsize=(10, 2))
+# for i in range(10):
+#     plt.subplot(1, 10, i + 1)
+#     plt.imshow(train_images[i], cmap="gray")
+#     plt.title(f"Label: {train_labels[i]}")
+#     plt.axis("off")
+# plt.savefig(f"results/{timestamp}_lgn/imgs/sample_train_images.png")
 
 if __name__ == "__main__":
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
                         num_outputs=neat_outputs,
                         init_hidden_layers=neat_hidden_layers,
                         output_transform=ACT.identity,
-                        mutation=DefaultMutation(),
+                        mutation=DefaultMutation(conn_delete=0.0, node_delete=0.0),
                     ),
                 ),
                 activation=ACT.nand,
