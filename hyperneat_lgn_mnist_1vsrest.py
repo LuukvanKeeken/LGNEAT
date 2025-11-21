@@ -174,7 +174,7 @@ if __name__ == "__main__":
             problem=mnist,
             fitness_target=-0.02,
             generation_limit=200000,
-            seed=i,
+            seed=i+1,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
         )

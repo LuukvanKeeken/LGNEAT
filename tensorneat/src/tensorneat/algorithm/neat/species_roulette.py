@@ -354,7 +354,6 @@ class SpeciesControllerRoulette(StatefulBaseClass):
 
             # Create a mask for the top survive_size elements
             mask = jnp.arange(sorted_fitnesses.shape[0]) < survive_size
-            survivor_fitness = jnp.where(mask, sorted_fitnesses, -jnp.inf)
             # Only use non -inf values for probabilities
             valid = mask
             fitness_shifted = jnp.where(valid, sorted_fitnesses, 0.0)
