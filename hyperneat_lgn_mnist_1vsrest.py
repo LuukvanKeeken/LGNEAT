@@ -146,7 +146,7 @@ if __name__ == "__main__":
                         num_outputs=neat_outputs,
                         init_hidden_layers=neat_hidden_layers,
                         output_transform=ACT.identity,
-                        mutation=DefaultMutation(conn_add=0.05, conn_delete=0.0, node_add=0.03, node_delete=0.0),
+                        mutation=DefaultMutation(conn_delete=0.0, node_delete=0.0),
                     ),
                 ),
                 activation=ACT.nand,
