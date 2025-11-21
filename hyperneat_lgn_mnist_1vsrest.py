@@ -24,9 +24,13 @@ start_time = time.time()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--single_class", type=int, default=2)
+parser.add_argument("--add_node_rate", type=float, default=0.1)
+parser.add_argument("--add_conn_rate", type=float, default=0.2)
 args = parser.parse_args()
 
 single_class = args.single_class
+add_node_rate = args.add_node_rate
+add_conn_rate = args.add_conn_rate
 
 
 # Check if results directory exists, if not, create it
@@ -146,7 +150,7 @@ if __name__ == "__main__":
                         num_outputs=neat_outputs,
                         init_hidden_layers=neat_hidden_layers,
                         output_transform=ACT.identity,
-                        mutation=DefaultMutation(conn_delete=0.0, node_delete=0.0),
+                        mutation=DefaultMutation(conn_add=add_conn_rate, conn_delete=0.0, node_add=add_node_rate, node_delete=0.0),
                     ),
                 ),
                 activation=ACT.nand,
