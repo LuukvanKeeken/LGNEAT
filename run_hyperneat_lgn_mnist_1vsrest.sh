@@ -3,6 +3,7 @@
 class="$1"
 add_node_rate="$2"
 add_conn_rate="$3"
+start_seed="$4"
 
 #script to be run server-side
 
@@ -17,4 +18,4 @@ pip install -U "jax[cuda12]"
 
 
 #for 1 run:
-python3 "hyperneat_lgn_mnist_1vsrest.py" --single_class="$class" --add_node_rate="$add_node_rate" --add_conn_rate="$add_conn_rate"
+python3 "hyperneat_lgn_mnist_1vsrest.py" --single_class="$class" --add_node_rate="$add_node_rate" --add_conn_rate="$add_conn_rate" --start_seed="$start_seed"
