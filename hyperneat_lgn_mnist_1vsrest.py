@@ -146,7 +146,7 @@ if __name__ == "__main__":
                         num_outputs=neat_outputs,
                         init_hidden_layers=neat_hidden_layers,
                         output_transform=ACT.identity,
-                        mutation=DefaultMutation(conn_delete=0.0, node_delete=0.0),
+                        mutation=DefaultMutation(conn_add=0.05, conn_delete=0.0, node_add=0.03, node_delete=0.0),
                     ),
                 ),
                 activation=ACT.nand,
@@ -174,7 +174,7 @@ if __name__ == "__main__":
             problem=mnist,
             fitness_target=-0.02,
             generation_limit=200000,
-            seed=i+1,
+            seed=i,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
         )
@@ -203,6 +203,7 @@ if __name__ == "__main__":
             f_settings.write(f"Num train items per class: {num_train_per_class}\n")
             f_settings.write(f"Single class: {single_class}\n")
             f_settings.write(f"Species selection method: {algorithm.neat.species_selection_method}\n")
+            f_settings.write(f"Mutation rates: conn_add {algorithm.neat.genome.mutation.conn_add}, conn_delete {algorithm.neat.genome.mutation.conn_delete}, node_add {algorithm.neat.genome.mutation.node_add}, node_delete {algorithm.neat.genome.mutation.node_delete}\n")
 
 
 
