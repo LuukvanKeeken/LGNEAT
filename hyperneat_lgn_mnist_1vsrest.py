@@ -26,11 +26,13 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--single_class", type=int, default=2)
 parser.add_argument("--add_node_rate", type=float, default=0.1)
 parser.add_argument("--add_conn_rate", type=float, default=0.2)
+parser.add_argument("--start_seed", type=int, default=1)
 args = parser.parse_args()
 
 single_class = args.single_class
 add_node_rate = args.add_node_rate
 add_conn_rate = args.add_conn_rate
+start_seed = args.start_seed
 
 
 # Check if results directory exists, if not, create it
@@ -178,7 +180,7 @@ if __name__ == "__main__":
             problem=mnist,
             fitness_target=-0.02,
             generation_limit=200000,
-            seed=i,
+            seed=i+start_seed,
             is_save=True,
             save_dir=f"results/{timestamp}_lgn",
         )
