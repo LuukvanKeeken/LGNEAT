@@ -1,9 +1,9 @@
-from tensorneat.pipeline import Pipeline
-from tensorneat.algorithm.neat import NEAT
-from tensorneat.genome import RecurrentGenome, BiasNode
+from tensorneat.src.tensorneat.pipeline import Pipeline
+from tensorneat.src.tensorneat.algorithm.neat import NEAT
+from tensorneat.src.tensorneat.genome import RecurrentGenome, BiasNode
 
-from tensorneat.problem.rl import BraxEnv
-from tensorneat.common import ACT, AGG
+from tensorneat.src.tensorneat.problem.rl import BraxEnv
+from tensorneat.src.tensorneat.common import ACT, AGG
 
 if __name__ == "__main__":
     pipeline = Pipeline(

@@ -17,5 +17,16 @@ pip install -U "jax[cuda12]"
 
 
 
-#for 1 run:
-python3 "hyperneat_lgn_mnist_1vsrest.py" --single_class="$class" --add_node_rate="$add_node_rate" --add_conn_rate="$add_conn_rate" --start_seed="$start_seed"
+if [ "$#" -eq 1 ]; then
+    python3 "hyperneat_lgn_mnist_1vsrest.py" --single_class="$class"
+elif [ "$#" -eq 2 ]; then
+    # Example: use class and add_node_rate
+    python3 "hyperneat_lgn_mnist_1vsrest.py" --single_class="$class" --add_node_rate="$add_node_rate"
+elif [ "$#" -eq 3 ]; then
+    # Example: use class, add_node_rate, add_conn_rate
+    python3 "hyperneat_lgn_mnist_1vsrest.py" --single_class="$class" --add_node_rate="$add_node_rate" --add_conn_rate="$add_conn_rate"
+elif [ "$#" -eq 4 ]; then
+    python3 "hyperneat_lgn_mnist_1vsrest.py" --single_class="$class" --add_node_rate="$add_node_rate" --add_conn_rate="$add_conn_rate" --start_seed="$start_seed"
+else
+    python3 "hyperneat_lgn_mnist_1vsrest.py" 
+fi
