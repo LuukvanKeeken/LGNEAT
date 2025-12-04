@@ -27,12 +27,14 @@ parser.add_argument("--single_class", type=int, default=2)
 parser.add_argument("--add_node_rate", type=float, default=0.1)
 parser.add_argument("--add_conn_rate", type=float, default=0.2)
 parser.add_argument("--start_seed", type=int, default=1)
+parser.add_argument("--num_elites", type=int, default=1)
 args = parser.parse_args()
 
 single_class = args.single_class
 add_node_rate = args.add_node_rate
 add_conn_rate = args.add_conn_rate
 start_seed = args.start_seed
+num_elites = args.num_elites
 
 
 # Check if results directory exists, if not, create it
@@ -145,7 +147,7 @@ if __name__ == "__main__":
                     pop_size=100,
                     species_size=8,
                     survival_threshold=0.1,
-                    species_elitism=1,
+                    species_elitism=num_elites,
                     compatibility_threshold=1.0,
                     genome=DefaultGenomeCPPN(
                         num_inputs=neat_inputs,  # size of query coors
